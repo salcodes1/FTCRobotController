@@ -85,6 +85,10 @@ public class OuttakeMechanism {
         }
     }
 
+    public boolean workHasFinished() {
+        return workThread == null || (!workThread.isAlive());
+    }
+
     public void setStateAsync(State state) {
         // potentially unsafe; time will tell..
 

@@ -114,11 +114,25 @@ public class IntakeMechanism {
 
     public void toggleDirection()
     {
-        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        if(intakeMotor.getDirection() == DcMotorSimple.Direction.REVERSE)
+            intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        else
+            intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    boolean actionate()
+    void actionate(long timeout)
     {
+        if(timeout != -1) {
+            Timer timeoutTimer = new Timer();
+            timeoutTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    interruptWork();
+                }
+            }, timeout);
+        }
+
+        lastResult = false;
         try {
             // (positively?) insane method for changing a variable in inner and reading it in outer
 
@@ -132,34 +146,31 @@ public class IntakeMechanism {
 
                 if(insideDetectPipeline.pieceInside()) {
                     elementsCount++;
+                    lastResult = true;
                     break;
                 }
                 Thread.yield();
             }
 
             intakeServo.setPosition(INTAKE_SERVO_IDLE_POS);
-            Thread.sleep(1000);
+            Thread.sleep(200);
             // inverting the direction so it doesnt take any other elems
             intakeMotor.setPower(-INTAKE_MOTOR_POWER);
             Thread.sleep(1500);
             intakeMotor.setPower(0);
             Thread.sleep(1500);
         } catch (InterruptedException ignored) {
-            return false;
         } finally {
             intakeMotor.setPower(0);
             intakeServo.setPosition(INTAKE_SERVO_IDLE_POS);
             intermediaryMotor.setPower(0);
         }
-        return !Thread.interrupted();
     }
 
-    public void startWorkAsync() {
+    public void startWorkAsync(long timeout) {
         if(!workHasFinished()) return;
 
-        workThread = new Thread(() -> {
-            lastResult = actionate();
-        });
+        workThread = new Thread(() -> actionate(timeout));
         workThread.start();
     }
 

@@ -9,82 +9,125 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.RR.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RR.util.AssetsTrajectoryManager;
-
-import java.util.Map;
+import org.firstinspires.ftc.teamcode.mechanisms.IntakeMechanism;
+import org.firstinspires.ftc.teamcode.mechanisms.OuttakeMechanism;
+import org.firstinspires.ftc.teamcode.statics.PoseStorage;
 
 @Config
 @Autonomous
 public class AutoOpV1 extends LinearOpMode {
 
+    enum eAutoState {
+        START_TO_HUB,
+        HUB_TO_WAREHOUSE,
+        WAREHOUSE_TO_HUB,
+        INTAKE_RUNNING,
+        OUTTAKE_RUNNING,
+        IDLE
+    }
     public static int CASE = 1;
 
     SampleMecanumDrive drive;
 
-    Trajectory warehouse_to_hub, hub_to_warehouse;
+    Trajectory warehouse_to_hub, hub_to_warehouse, start_to_hub;
+
+    IntakeMechanism intakeMechanism;
+    OuttakeMechanism outtakeMechanism;
+
+    eAutoState state;
 
     @Override
     public void runOpMode() throws InterruptedException {
         runInit();
         waitForStart();
-        drive = new SampleMecanumDrive(hardwareMap);
 
-        Thread t = new Thread(() -> {
-            switch (CASE) {
-                case 1: {
-                    try {
-                        case1();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                }
-                case 2: {
-                    case2();
-                    break;
-                }
-                case 3: {
-                    case3();
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-        });
-        t.start();
 
-        while(!isStopRequested())
+
+        state = eAutoState.START_TO_HUB;
+        drive.setPoseEstimate(PoseStorage.poseEstimate);
+        drive.followTrajectoryAsync(start_to_hub);
+
+
+        while(opModeIsActive() && !isStopRequested())
         {
-            Thread.yield();
+            run();
         }
-
-        t.interrupt();
 
     }
 
-    private void case1() throws InterruptedException {
+    private void run() {
+
+
+        switch (state) {
+            case IDLE: {
+                // do Nothing
+                break;
+            }
+            case START_TO_HUB: {
+                outtakeMechanism.setStateAsync(OuttakeMechanism.State.HIGH);
+                if(!drive.isBusy()) {
+                    outtakeMechanism.setStateAsync(OuttakeMechanism.State.LOADING);
+                    state = eAutoState.OUTTAKE_RUNNING;
+                }
+                break;
+            }
+            case HUB_TO_WAREHOUSE: {
+                intakeMechanism.startWorkAsync(5);
+                state = eAutoState.INTAKE_RUNNING;
+                break;
+            }
+            case INTAKE_RUNNING: {
+                if(intakeMechanism.workHasFinished()) {
+                    if(intakeMechanism.getLastResult()) {
+                    } else {
+                        // TODO: exista decizie in cazul in care nu a putut lua GE?
+                        //  posibil sa optam pentru rata?
+                    }
+                    drive.followTrajectoryAsync(warehouse_to_hub);
+                    state = eAutoState.WAREHOUSE_TO_HUB;
+                }
+                break;
+            }
+            case WAREHOUSE_TO_HUB: {
+                if(!drive.isBusy()) {
+                    state = eAutoState.OUTTAKE_RUNNING;
+                }
+                break;
+            }
+            case OUTTAKE_RUNNING: {
+                if(outtakeMechanism.workHasFinished()) {
+                    drive.followTrajectoryAsync(hub_to_warehouse);
+                    state = eAutoState.HUB_TO_WAREHOUSE;
+                }
+                break;
+            }
+        }
+        drive.update();
+        PoseStorage.poseEstimate = drive.getPoseEstimate();
+    }
+
+    private void case1() {
         drive.setPoseEstimate(new Pose2d(48, -66.59, Math.toRadians(0)));
-        while(!Thread.interrupted()) {
-            drive.followTrajectory(warehouse_to_hub);
-            Thread.sleep(1000);
-            drive.followTrajectory(hub_to_warehouse);
-            Thread.sleep(1000);
-        }
-        drive.setWeightedDrivePower(new Pose2d(0, 0, 0));
     }
 
-    private void case2() {
-        drive.setPoseEstimate(new Pose2d(-12.7, -42.5, Math.toRadians(-90)));
-        drive.followTrajectory(hub_to_warehouse);
-    }
 
-    private void case3() {
-
-    }
 
     private void runInit() {
+        drive = new SampleMecanumDrive(hardwareMap);
+        intakeMechanism = new IntakeMechanism(this);
+        outtakeMechanism = new OuttakeMechanism(this);
+
+        PoseStorage.poseEstimate = new Pose2d(12, -63.34, Math.toRadians(-90));
+//        PoseStorage.poseEstimate = new Pose2d(48, -66.59, 0);
+
         warehouse_to_hub = AssetsTrajectoryManager.load("warehouse_to_hub");
         hub_to_warehouse = AssetsTrajectoryManager.load("hub_to_warehouse");
+//        start_to_hub = AssetsTrajectoryManager.load("start_to_hub");
+        start_to_hub = drive.trajectoryBuilder(PoseStorage.poseEstimate, true)
+                .lineTo(new Vector2d(-10.7, -37.7))
+                .build();
+
+        CASE = 1; // TODO: opencv
     }
 
 

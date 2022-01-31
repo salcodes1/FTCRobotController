@@ -28,7 +28,6 @@ public class TeleOpV1 extends OpMode {
 
     private PIDFController headingController = new PIDFController(SampleMecanumDrive.HEADING_PID);
 
-//    GamepadEx bGamepad = new GamepadEx(gamepad1);
 
 
     @Override
@@ -115,8 +114,6 @@ public class TeleOpV1 extends OpMode {
 
 //        circleFollow();
         telemetry.update();
-//        bGamepad.update();
-
     }
 
     private Vector2d normalize(Vector2d vec) {
@@ -189,7 +186,7 @@ public class TeleOpV1 extends OpMode {
             case RESET: {
                 if(gamepad1.a) {
                     state.compareAndSet(WorkState.RESET, WorkState.INTAKE_RUNNING);
-                    intakeMechanism.startWorkAsync();
+                    intakeMechanism.startWorkAsync(-1);
                 } else
                 break;
             }
@@ -197,19 +194,14 @@ public class TeleOpV1 extends OpMode {
                 if(intakeMechanism.workHasFinished()) {
                     boolean caughtPiece = intakeMechanism.getLastResult();
                     if(caughtPiece) {
-                        gamepad1.rumbleBlips(1);
                         state.compareAndSet(WorkState.INTAKE_RUNNING, WorkState.SELECT_LEVEL_AND_CONFIRM);
                     } else {
-                        gamepad1.rumbleBlips(2);
                         state.set(WorkState.RESET);
                     }
                 } else {
                     if(gamepad1.x) {
                         intakeMechanism.interruptWork();
                         state.set(WorkState.SELECT_LEVEL_AND_CONFIRM);
-                    }
-                    if(gamepad1.b) {
-                        intakeMechanism.toggleDirection();
                     }
                 }
 
