@@ -34,8 +34,7 @@ public class AutoOpV1 extends LinearOpMode {
 
     SampleMecanumDrive drive;
 
-    Trajectory warehouse_to_hub, hub_to_warehouse, start_to_hub, start_to_carousel;
-    TrajectorySequence carousel_to_hub;
+    Trajectory warehouse_to_hub, hub_to_warehouse, start_to_hub, start_to_carousel, carousel_to_hub;
 
     IntakeMechanism intakeMechanism;
     OuttakeMechanism outtakeMechanism;
@@ -78,35 +77,31 @@ public class AutoOpV1 extends LinearOpMode {
                     carouselMotor.setTargetPosition(-800);
                     carouselMotor.setPower(-0.17);
                     state = eAutoState.CAROUSEL_RUNNING;
+                    outtakeMechanism.setStateAsync(OuttakeMechanism.State.HIGH);
                 }
                 break;
             }
             case CAROUSEL_RUNNING: {
                 if(!carouselMotor.isBusy()) {
                     carouselMotor.setPower(0);
-                    outtakeMechanism.setStateAsync(OuttakeMechanism.State.HIGH);
-                    drive.followTrajectorySequence(carousel_to_hub);
+                    drive.followTrajectoryAsync(carousel_to_hub);
                     state = eAutoState.CAROUSEL_TO_HUB;
                 }
                 break;
             }
             case CAROUSEL_TO_HUB: {
                 if(!drive.isBusy()) {
-                    state = eAutoState.IDLE;
-                }
-                break;
-            }
-            case START_TO_HUB: {
-                outtakeMechanism.setStateAsync(OuttakeMechanism.State.HIGH);
-                if(!drive.isBusy()) {
-//                    outtakeMechanism.setStateAsync(OuttakeMechanism.State.LOADING);
-//                    state = eAutoState.OUTTAKE_RUNNING;
+                    outtakeMechanism.setStateAsync(OuttakeMechanism.State.LOADING);
+                    drive.followTrajectoryAsync(hub_to_warehouse);
+                    state = eAutoState.HUB_TO_WAREHOUSE;
                 }
                 break;
             }
             case HUB_TO_WAREHOUSE: {
-                intakeMechanism.startWorkAsync(5);
-                state = eAutoState.INTAKE_RUNNING;
+                if(!drive.isBusy()) {
+                    intakeMechanism.startWorkAsync(5);
+                    state = eAutoState.INTAKE_RUNNING;
+                }
                 break;
             }
             case INTAKE_RUNNING: {
@@ -158,11 +153,8 @@ public class AutoOpV1 extends LinearOpMode {
         warehouse_to_hub = AssetsTrajectoryManager.load("warehouse_to_hub");
         hub_to_warehouse = AssetsTrajectoryManager.load("hub_to_warehouse");
         start_to_carousel = AssetsTrajectoryManager.load("start_to_carousel");
-        carousel_to_hub = drive.trajectorySequenceBuilder(new Pose2d(-61, -60, Math.toRadians(180)))
-                .addTrajectory(AssetsTrajectoryManager.load("carousel_to_hub"))
-                //.addDisplacementMarker(() -> outtakeMechanism.setStateAsync(OuttakeMechanism.State.LOADING))
-                .addTrajectory(AssetsTrajectoryManager.load(("hub_to_warehouse")))
-                .build();
+        carousel_to_hub = AssetsTrajectoryManager.load("carousel_to_hub");
+
 
 //        start_to_hub = AssetsTrajectoryManager.load("start_to_hub");
         start_to_hub = drive.trajectoryBuilder(PoseStorage.poseEstimate, true)

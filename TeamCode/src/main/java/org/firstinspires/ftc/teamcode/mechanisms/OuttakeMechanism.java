@@ -23,7 +23,7 @@ public class OuttakeMechanism {
     public static int MID_TICKS = 500;
     public static int HIGH_TICKS = 1200;
 
-    AtomicReference<State> currentState = new AtomicReference<>();
+    volatile AtomicReference<State> currentState = new AtomicReference<>();
 
     Thread workThread;
 
