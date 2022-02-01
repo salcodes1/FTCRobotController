@@ -7,6 +7,8 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Mecanum;
 import org.firstinspires.ftc.teamcode.RR.drive.DriveConstants;
@@ -25,10 +27,13 @@ public class TeleOpV1 extends OpMode {
     AtomicReference<WorkState> state;
     IntakeMechanism intakeMechanism;
     OuttakeMechanism outtakeMechanism;
+    DcMotor carouselMotor;
+    boolean carouselState = false;
+    boolean bumperLeftState = false;
 
     private PIDFController headingController = new PIDFController(SampleMecanumDrive.HEADING_PID);
 
-
+    Servo capServo;
 
     @Override
     public void init() {
@@ -37,7 +42,8 @@ public class TeleOpV1 extends OpMode {
         state = new AtomicReference<>(WorkState.SELECT_LEVEL_AND_CONFIRM);
         intakeMechanism = new IntakeMechanism(this);
         outtakeMechanism = new OuttakeMechanism(this);
-
+        carouselMotor = hardwareMap.get(DcMotor.class, "carouselMotor");
+        capServo = hardwareMap.get(Servo.class, "capServo");
 
         headingController.setInputBounds(-Math.PI, Math.PI);
     }
@@ -82,7 +88,17 @@ public class TeleOpV1 extends OpMode {
 //                rx_I * 0.6 * Math.signum(-gamepad2.left_trigger + gamepad2.right_trigger)
 //        ));
 
+        if(gamepad1.left_bumper && !bumperLeftState)
+        {
+            carouselMotor.setPower(carouselState ? 0.0 : -0.27);
+            carouselState = !carouselState;
+        }
+        bumperLeftState = gamepad1.left_bumper;
 
+        if(gamepad1.right_bumper)
+            capServo.setPosition(1);
+        else
+            capServo.setPosition(0 );
         workflow();
 
 //        if(gamepad1.y) {
