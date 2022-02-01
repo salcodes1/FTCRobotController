@@ -32,6 +32,8 @@ public class AutoOpV1 extends LinearOpMode {
     }
     public static int CASE = 1;
 
+    boolean ciclu;
+
     SampleMecanumDrive drive;
 
     Trajectory warehouse_to_hub, hub_to_warehouse, start_to_hub, start_to_carousel, carousel_to_hub;
@@ -58,6 +60,7 @@ public class AutoOpV1 extends LinearOpMode {
         while(opModeIsActive() && !isStopRequested())
         {
             run();
+            telemetry.update();
         }
 
     }
@@ -73,8 +76,8 @@ public class AutoOpV1 extends LinearOpMode {
 
             case START_TO_CAROUSEL: {
                 if(!drive.isBusy()) {
-                    carouselMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     carouselMotor.setTargetPosition(-800);
+                    carouselMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     carouselMotor.setPower(-0.17);
                     state = eAutoState.CAROUSEL_RUNNING;
                     outtakeMechanism.setStateAsync(OuttakeMechanism.State.HIGH);
@@ -91,16 +94,18 @@ public class AutoOpV1 extends LinearOpMode {
             }
             case CAROUSEL_TO_HUB: {
                 if(!drive.isBusy()) {
-                    outtakeMechanism.setStateAsync(OuttakeMechanism.State.LOADING);
-                    drive.followTrajectoryAsync(hub_to_warehouse);
-                    state = eAutoState.HUB_TO_WAREHOUSE;
+                    state = eAutoState.OUTTAKE_RUNNING;
                 }
                 break;
             }
             case HUB_TO_WAREHOUSE: {
                 if(!drive.isBusy()) {
-                    intakeMechanism.startWorkAsync(5);
-                    state = eAutoState.INTAKE_RUNNING;
+                    if(!ciclu)
+                    {
+                        intakeMechanism.startWorkAsync(2000);
+                        state = eAutoState.INTAKE_RUNNING;
+                        ciclu = true;
+                    } else state = eAutoState.IDLE;
                 }
                 break;
             }
@@ -118,6 +123,7 @@ public class AutoOpV1 extends LinearOpMode {
             }
             case WAREHOUSE_TO_HUB: {
                 if(!drive.isBusy()) {
+                    outtakeMechanism.setStateAsync(OuttakeMechanism.State.HIGH);
                     state = eAutoState.OUTTAKE_RUNNING;
                 }
                 break;
@@ -125,6 +131,7 @@ public class AutoOpV1 extends LinearOpMode {
             case OUTTAKE_RUNNING: {
                 if(outtakeMechanism.workHasFinished()) {
                     drive.followTrajectoryAsync(hub_to_warehouse);
+                    outtakeMechanism.setStateAsync(OuttakeMechanism.State.LOADING);
                     state = eAutoState.HUB_TO_WAREHOUSE;
                 }
                 break;
