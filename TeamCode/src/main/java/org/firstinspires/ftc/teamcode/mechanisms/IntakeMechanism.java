@@ -48,8 +48,6 @@ public class IntakeMechanism {
     int elementsCount = 0;
 
     public IntakeMechanism(OpMode opMode) {
-        int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
-
         insideDetectPipeline = new InsideDetectPipeline(opMode.telemetry);
 
 
@@ -57,7 +55,7 @@ public class IntakeMechanism {
 
 
         webcamName = opMode.hardwareMap.get(WebcamName.class, "Webcam 1");
-        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName);
         camera.setPipeline(insideDetectPipeline);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {

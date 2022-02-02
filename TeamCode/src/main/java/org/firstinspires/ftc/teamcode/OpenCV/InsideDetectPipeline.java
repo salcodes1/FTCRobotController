@@ -41,6 +41,7 @@ public class InsideDetectPipeline extends OpenCvPipeline {
         Scalar lowHSV = new Scalar(0, 150, 120);
         Scalar highHSV = new Scalar(45, 255, 255);
 
+
         Core.inRange(mat, lowHSV, highHSV, gateMatYellow);
 
         // White

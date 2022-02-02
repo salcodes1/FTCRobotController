@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
+
 import java.util.Dictionary;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -32,7 +34,7 @@ public class OuttakeMechanism {
     DcMotor elevationMotor;
     Servo containerServo;
 
-    State PrevState;
+    State PrevState = State.LOW;
 
 
     public OuttakeMechanism(OpMode opMode) {
@@ -53,13 +55,19 @@ public class OuttakeMechanism {
         currentState.set(state);
         switch (currentState.get()) {
             case LOADING: {
+
+                    containerServo.setPosition(PrevState == State.LOW ? 0.2 :  0.3);
+                    opMode.telemetry.addLine(Double.toString(containerServo.getPosition()));
                 try {
-                    containerServo.setPosition(PrevState == PrevState.LOW ? 0.2 :  0.3);
                     Thread.sleep(700);
-                    containerServo.setPosition(1);
-                    Thread.sleep(400);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                catch (InterruptedException e) {
+                containerServo.setPosition(1);
+                try {
+                    Thread.sleep(400);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 goToTicks(LOADING_TICKS);
                 break;

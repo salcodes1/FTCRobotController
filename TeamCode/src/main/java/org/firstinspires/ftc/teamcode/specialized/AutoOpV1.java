@@ -28,7 +28,8 @@ public class AutoOpV1 extends LinearOpMode {
         WAREHOUSE_TO_HUB,
         INTAKE_RUNNING,
         OUTTAKE_RUNNING,
-        IDLE
+        IDLE,
+        HUB_TO_PARK
     }
     public static int CASE = 1;
 
@@ -36,7 +37,7 @@ public class AutoOpV1 extends LinearOpMode {
 
     SampleMecanumDrive drive;
 
-    Trajectory warehouse_to_hub, hub_to_warehouse, start_to_hub, start_to_carousel, carousel_to_hub;
+    Trajectory warehouse_to_hub, hub_to_warehouse, start_to_hub, start_to_carousel, carousel_to_hub, hub_to_park;
 
     IntakeMechanism intakeMechanism;
     OuttakeMechanism outtakeMechanism;
@@ -94,7 +95,9 @@ public class AutoOpV1 extends LinearOpMode {
             }
             case CAROUSEL_TO_HUB: {
                 if(!drive.isBusy()) {
-                    state = eAutoState.OUTTAKE_RUNNING;
+                    outtakeMechanism.setStateAsync(OuttakeMechanism.State.LOADING);
+                    drive.followTrajectoryAsync(hub_to_warehouse);
+                    state = eAutoState.HUB_TO_WAREHOUSE;
                 }
                 break;
             }
@@ -125,12 +128,23 @@ public class AutoOpV1 extends LinearOpMode {
             }
             case OUTTAKE_RUNNING: {
                 if(outtakeMechanism.workHasFinished()) {
-                    drive.followTrajectoryAsync(hub_to_warehouse);
                     outtakeMechanism.setStateAsync(OuttakeMechanism.State.LOADING);
-                    state = eAutoState.HUB_TO_WAREHOUSE;
+                    if(!ciclu) {
+                        drive.followTrajectoryAsync(hub_to_warehouse);
+                        state = eAutoState.HUB_TO_WAREHOUSE;
+                    }
+                    else {
+                        drive.followTrajectoryAsync(hub_to_park);
+                        state = eAutoState.HUB_TO_PARK;
+                    }
+
                 }
                 break;
+
+
             }
+            case HUB_TO_PARK:
+                break;
         }
         drive.update();
         PoseStorage.poseEstimate = drive.getPoseEstimate();
@@ -156,6 +170,7 @@ public class AutoOpV1 extends LinearOpMode {
         hub_to_warehouse = AssetsTrajectoryManager.load("hub_to_warehouse");
         start_to_carousel = AssetsTrajectoryManager.load("start_to_carousel");
         carousel_to_hub = AssetsTrajectoryManager.load("carousel_to_hub");
+        hub_to_park = AssetsTrajectoryManager.load("hub_to_park");
 
 
 //        start_to_hub = AssetsTrajectoryManager.load("start_to_hub");
