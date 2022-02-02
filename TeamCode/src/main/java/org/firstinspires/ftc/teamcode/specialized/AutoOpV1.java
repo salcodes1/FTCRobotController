@@ -110,12 +110,7 @@ public class AutoOpV1 extends LinearOpMode {
                 break;
             }
             case INTAKE_RUNNING: {
-                if(intakeMechanism.workHasFinished()) {
-                    if(intakeMechanism.getLastResult()) {
-                    } else {
-                        // TODO: exista decizie in cazul in care nu a putut lua GE?
-                        //  posibil sa optam pentru rata?
-                    }
+                if(intakeMechanism.workHasFinished() || intakeMechanism.getLastResult()) {
                     drive.followTrajectoryAsync(warehouse_to_hub);
                     state = eAutoState.WAREHOUSE_TO_HUB;
                 }

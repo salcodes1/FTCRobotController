@@ -83,27 +83,6 @@ public class IntakeMechanism {
 
     }
 
-    public void DEB_ToggleIntermediary() {
-        if(intermediaryMotor.getPower() > 0)
-            intermediaryMotor.setPower(0);
-        else
-            intermediaryMotor.setPower(INTERMEDIARY_MOTOR_POWER);
-    }
-
-    public void DEB_ToggleIntake() {
-        if(intakeMotor.getPower() < 0)
-            intakeMotor.setPower(0);
-        else
-            intakeMotor.setPower(-1);
-    }
-
-    public void DEB_ToggleServo() {
-        if(intakeServo.getPosition() == 1)
-            intakeServo.setPosition(0);
-        else
-            intakeServo.setPosition(1);
-    }
-
     public boolean workHasFinished() {
         return workThread == null || (!workThread.isAlive());
     }
@@ -120,17 +99,8 @@ public class IntakeMechanism {
             intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    void actionate(long timeout)
+    void actionate()
     {
-        if(timeout != -1) {
-            Timer timeoutTimer = new Timer();
-            timeoutTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    interruptWork();
-                }
-            }, timeout);
-        }
 
         lastResult = false;
         try {
@@ -139,7 +109,6 @@ public class IntakeMechanism {
             intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
             intakeMotor.setPower(INTAKE_MOTOR_POWER);
             intermediaryMotor.setPower(INTERMEDIARY_MOTOR_POWER);
-//            intakeServo.setPosition(INTAKE_SERVO_ENGAGED_POS);
 
             while(!Thread.interrupted()) {
                 camera.openCameraDevice();
@@ -170,7 +139,17 @@ public class IntakeMechanism {
     public void startWorkAsync(long timeout) {
         if(!workHasFinished()) return;
 
-        workThread = new Thread(() -> actionate(timeout));
+        if(timeout != -1) {
+            Timer timeoutTimer = new Timer();
+            timeoutTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    interruptWork();
+                }
+            }, timeout);
+        }
+
+        workThread = new Thread(() -> actionate());
         workThread.start();
     }
 
