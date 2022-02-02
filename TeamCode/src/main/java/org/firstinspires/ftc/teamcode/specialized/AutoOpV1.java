@@ -110,23 +110,24 @@ public class AutoOpV1 extends LinearOpMode {
                 break;
             }
             case INTAKE_RUNNING: {
-                if(intakeMechanism.workHasFinished() || intakeMechanism.getLastResult()) {
+                if(intakeMechanism.getLastResult()) {
                     drive.followTrajectoryAsync(warehouse_to_hub);
+                }
+                if(intakeMechanism.workHasFinished()) {
                     state = eAutoState.WAREHOUSE_TO_HUB;
                 }
                 break;
             }
             case WAREHOUSE_TO_HUB: {
                 if(!drive.isBusy()) {
-                    outtakeMechanism.setStateAsync(OuttakeMechanism.State.HIGH);
                     state = eAutoState.OUTTAKE_RUNNING;
                 }
                 break;
             }
             case OUTTAKE_RUNNING: {
                 if(outtakeMechanism.workHasFinished()) {
-                    drive.followTrajectoryAsync(hub_to_warehouse);
                     outtakeMechanism.setStateAsync(OuttakeMechanism.State.LOADING);
+                    drive.followTrajectoryAsync(hub_to_warehouse);
                     state = eAutoState.HUB_TO_WAREHOUSE;
                 }
                 break;
