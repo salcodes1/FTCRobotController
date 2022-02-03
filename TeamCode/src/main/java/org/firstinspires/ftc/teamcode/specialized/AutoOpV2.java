@@ -47,14 +47,22 @@ public class AutoOpV2 extends LinearOpMode {
 
 	eAutoState state;
 
+	int cycles = 0;
+
+	double startTime = 0;
+
 	@Override
 	public void runOpMode() throws InterruptedException {
 		runInit();
 		waitForStart();
+		startTime = System.currentTimeMillis();
 
 		state = eAutoState.START_TO_CAROUSEL;
 		drive.setPoseEstimate(PoseStorage.poseEstimate);
 		drive.followTrajectoryAsync(start_to_carousel);
+		carouselMotor.setTargetPosition(-1350);
+		carouselMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		carouselMotor.setPower(-0.17);
 
 
 		while(opModeIsActive() && !isStopRequested())
@@ -62,6 +70,7 @@ public class AutoOpV2 extends LinearOpMode {
 			run();
 			outtakeMechanism.update();
 			intakeMechanism.update();
+			telemetry.addLine("time: " + (System.currentTimeMillis() - startTime) / 1000.0f);
 			telemetry.update();
 		}
 
@@ -78,9 +87,6 @@ public class AutoOpV2 extends LinearOpMode {
 
 			case START_TO_CAROUSEL: {
 				if(!drive.isBusy()) {
-					carouselMotor.setTargetPosition(-800);
-					carouselMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-					carouselMotor.setPower(-0.17);
 					state = eAutoState.CAROUSEL_RUNNING;
 					outtakeMechanism.setLevel(Outtake.Level.high);
 				}
@@ -99,23 +105,23 @@ public class AutoOpV2 extends LinearOpMode {
 					outtakeMechanism.dropFor(200);
 					drive.followTrajectoryAsync(hub_to_warehouse);
 					state = eAutoState.HUB_TO_WAREHOUSE;
+					intakeMechanism.workFor(6000);
 				}
 				break;
 			}
 			case HUB_TO_WAREHOUSE: {
 				if(!drive.isBusy()) {
-						intakeMechanism.workFor(1500);
 						state = eAutoState.INTAKE_RUNNING;
 				}
 				break;
 			}
 			case INTAKE_RUNNING: {
-				if(!intakeMechanism.isWorking()) {
-					outtakeMechanism.setLevelWithDelay(Outtake.Level.high, 1500);
-					intakeMechanism.ejectFor(1500);
+//				if(!intakeMechanism.isWorking()) {
+					outtakeMechanism.setLevelWithDelay(Outtake.Level.high, 3000);
+//					intakeMechanism.ejectFor(1500);
 					drive.followTrajectoryAsync(warehouse_to_hub);
 					state = eAutoState.WAREHOUSE_TO_HUB;
-				}
+//				}
 				break;
 			}
 			case WAREHOUSE_TO_HUB: {
@@ -126,8 +132,16 @@ public class AutoOpV2 extends LinearOpMode {
 			}
 			case OUTTAKE_RUNNING: {
 				outtakeMechanism.dropFor(200);
+				cycles++;
+				if(cycles < 2) {
+					drive.followTrajectoryAsync(hub_to_warehouse);
+					state = eAutoState.HUB_TO_WAREHOUSE;
+					intakeMechanism.workFor(6000);
+				}
+				else {
 					drive.followTrajectoryAsync(hub_to_park);
 					state = eAutoState.HUB_TO_PARK;
+				}
 				break;
 			}
 			case HUB_TO_PARK:
@@ -168,8 +182,4 @@ public class AutoOpV2 extends LinearOpMode {
 
 
 	}
-
-
-
-
 }
