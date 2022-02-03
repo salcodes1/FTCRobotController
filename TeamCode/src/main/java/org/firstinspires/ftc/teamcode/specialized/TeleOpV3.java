@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.specialized;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.teamcode.GamepadEx;
 import org.firstinspires.ftc.teamcode.Mecanum;
 import org.firstinspires.ftc.teamcode.mechanisms.OuttakeMechanism;
 
+@Disabled
 @TeleOp()
 public class TeleOpV3 extends OpMode {
 
@@ -41,6 +43,8 @@ public class TeleOpV3 extends OpMode {
 	DcMotor carouselMotor;
 	boolean carouselState = false;
 
+	Thread movementThread;
+
 	OuttakeMechanism outtake;
 
 	Servo capServo;
@@ -53,8 +57,8 @@ public class TeleOpV3 extends OpMode {
 		intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
 		intermediaryMotor = hardwareMap.get(DcMotor.class, "intermediaryMotor");
 		carouselMotor = hardwareMap.get(DcMotor.class, "carouselMotor");
+		capServo = hardwareMap.get(Servo.class, "capServo");
 	}
-
 	@Override
 	public void loop() {
 		drive.vectorMove(-gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_trigger - gamepad1.right_trigger, 0.6);

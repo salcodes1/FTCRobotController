@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.RR.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RR.trajectorysequence.TrajectorySequence;
@@ -43,6 +44,7 @@ public class AutoOpV1 extends LinearOpMode {
     OuttakeMechanism outtakeMechanism;
 
     DcMotor carouselMotor;
+    Servo containerServo;
 
     eAutoState state;
 
@@ -127,18 +129,16 @@ public class AutoOpV1 extends LinearOpMode {
                 break;
             }
             case OUTTAKE_RUNNING: {
-                if(outtakeMechanism.workHasFinished()) {
-                    outtakeMechanism.setStateAsync(OuttakeMechanism.State.LOADING);
-                    if(!ciclu) {
-                        drive.followTrajectoryAsync(hub_to_warehouse);
-                        state = eAutoState.HUB_TO_WAREHOUSE;
-                    }
-                    else {
-                        drive.followTrajectoryAsync(hub_to_park);
-                        state = eAutoState.HUB_TO_PARK;
-                    }
-
+                outtakeMechanism.setStateAsync(OuttakeMechanism.State.LOADING);
+                if(!ciclu) {
+                    drive.followTrajectoryAsync(hub_to_warehouse);
+                    state = eAutoState.HUB_TO_WAREHOUSE;
                 }
+                else {
+                    drive.followTrajectoryAsync(hub_to_park);
+                    state = eAutoState.HUB_TO_PARK;
+                }
+
                 break;
 
 
@@ -162,6 +162,9 @@ public class AutoOpV1 extends LinearOpMode {
         outtakeMechanism = new OuttakeMechanism(this);
         carouselMotor = hardwareMap.get(DcMotor.class, "carouselMotor");
         carouselMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        containerServo = hardwareMap.get(Servo.class, "containerServo");
+
 
         PoseStorage.poseEstimate = new Pose2d(-36.00, -63.34, Math.toRadians(90));
 //        PoseStorage.poseEstimate = new Pose2d(48, -66.59, 0);

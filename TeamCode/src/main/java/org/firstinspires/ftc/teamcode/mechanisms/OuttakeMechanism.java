@@ -55,7 +55,6 @@ public class OuttakeMechanism {
         currentState.set(state);
         switch (currentState.get()) {
             case LOADING: {
-
                     containerServo.setPosition(PrevState == State.LOW ? 0.2 :  0.3);
                     opMode.telemetry.addLine(Double.toString(containerServo.getPosition()));
                 try {
@@ -122,9 +121,7 @@ public class OuttakeMechanism {
 //        }
 
         elevationMotor.setPower(0.75);
-        while(elevationMotor.isBusy() && !Thread.interrupted()) {
-            Thread.yield();
-        }
+        while(elevationMotor.isBusy() && !Thread.interrupted());
         elevationMotor.setPower(0);
     }
 
