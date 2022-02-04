@@ -75,7 +75,7 @@ public class Intake {
 	public void ejectFor(double time)
 	{
 		intakeMotor.setPower(1);
-		intermediaryMotor.setPower(-1);
+		intermediaryMotor.setPower(1);
 		isCurrentlyWorking = true;
 		runAfter(time, () -> {
 			intakeMotor.setPower(0);

@@ -125,13 +125,13 @@ public class AutoOpV2 extends LinearOpMode {
 
 					// already start to run the intake
 					intakeMechanism.workFor(4500);
-					intakeMechanism.ejectForWithDelay(1500, 4500);
 				}
 				break;
 			}
 			case HUB_TO_WAREHOUSE: {
 				if(!drive.isBusy()) {
 					outtakeMechanism.setLevelWithDelay(Outtake.Level.high, 3000);
+					intakeMechanism.ejectForWithDelay(500, 2000);
 
 					if(cycles == 0) {
 						drive.followTrajectoryAsync(warehouse_to_hub_c1);
@@ -158,8 +158,7 @@ public class AutoOpV2 extends LinearOpMode {
 					state = eAutoState.HUB_TO_WAREHOUSE;
 
 					// already start to run the intake
-					intakeMechanism.workFor(5000);
-					intakeMechanism.ejectForWithDelay(1500, 5000);
+					intakeMechanism.workFor(4500);
 				} else {
 					drive.followTrajectoryAsync(hub_to_park);
 					state = eAutoState.HUB_TO_PARK;
