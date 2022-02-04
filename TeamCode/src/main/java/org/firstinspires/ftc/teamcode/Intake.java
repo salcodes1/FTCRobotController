@@ -84,6 +84,13 @@ public class Intake {
 		});
 	}
 
+	public void ejectForWithDelay(double time, double delay)
+	{
+		runAfter(delay, () -> {
+			ejectFor(time);
+		});
+	}
+
 	public boolean isWorking()
 	{
 		return isCurrentlyWorking;

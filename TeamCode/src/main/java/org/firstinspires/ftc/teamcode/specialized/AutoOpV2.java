@@ -105,7 +105,8 @@ public class AutoOpV2 extends LinearOpMode {
 					outtakeMechanism.dropFor(200);
 					drive.followTrajectoryAsync(hub_to_warehouse);
 					state = eAutoState.HUB_TO_WAREHOUSE;
-					intakeMechanism.workFor(6000);
+					intakeMechanism.workFor(4000);
+					intakeMechanism.ejectForWithDelay(2000, 4000);
 				}
 				break;
 			}
@@ -136,7 +137,8 @@ public class AutoOpV2 extends LinearOpMode {
 				if(cycles < 2) {
 					drive.followTrajectoryAsync(hub_to_warehouse);
 					state = eAutoState.HUB_TO_WAREHOUSE;
-					intakeMechanism.workFor(6000);
+					intakeMechanism.workFor(4000);
+					intakeMechanism.ejectForWithDelay(2000, 4000);
 				}
 				else {
 					drive.followTrajectoryAsync(hub_to_park);
