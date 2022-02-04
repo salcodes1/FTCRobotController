@@ -8,11 +8,17 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Intake;
+import org.firstinspires.ftc.teamcode.OpenCV.CapstoneDetectPipeline;
+import org.firstinspires.ftc.teamcode.OpenCV.InsideDetectPipeline;
 import org.firstinspires.ftc.teamcode.Outtake;
 import org.firstinspires.ftc.teamcode.RR.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RR.util.AssetsTrajectoryManager;
 import org.firstinspires.ftc.teamcode.statics.PoseStorage;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Config
 @Autonomous
@@ -49,6 +55,12 @@ public class AutoOpV2 extends LinearOpMode {
 	DcMotor carouselMotor;
 
 	eAutoState state;
+
+	CapstoneDetectPipeline capstoneDetection;
+	WebcamName webcamName;
+	OpenCvCamera camera;
+
+	Outtake.Level preloadLevel = Outtake.Level.high;
 
 	int cycles = 0;
 
@@ -91,7 +103,7 @@ public class AutoOpV2 extends LinearOpMode {
 			case START_TO_CAROUSEL: {
 				if(!drive.isBusy()) {
 					state = eAutoState.CAROUSEL_RUNNING;
-					outtakeMechanism.setLevel(Outtake.Level.high);
+					outtakeMechanism.setLevel(preloadLevel);
 				}
 				break;
 			}
@@ -112,8 +124,8 @@ public class AutoOpV2 extends LinearOpMode {
 					state = eAutoState.HUB_TO_WAREHOUSE;
 
 					// already start to run the intake
-					intakeMechanism.workFor(4000);
-					intakeMechanism.ejectForWithDelay(2000, 4000);
+					intakeMechanism.workFor(4500);
+					intakeMechanism.ejectForWithDelay(1500, 4500);
 				}
 				break;
 			}
@@ -141,20 +153,13 @@ public class AutoOpV2 extends LinearOpMode {
 				outtakeMechanism.dropFor(200);
 				cycles++;
 
-				if(cycles == 0) {
-					drive.followTrajectoryAsync(hub_to_warehouse_c1);
+				if(cycles == 1) {
+					drive.followTrajectoryAsync(hub_to_warehouse_c2);
 					state = eAutoState.HUB_TO_WAREHOUSE;
 
 					// already start to run the intake
-					intakeMechanism.workFor(4000);
-					intakeMechanism.ejectForWithDelay(2000, 4000);
-				} else if(cycles == 1) {
-					drive.followTrajectoryAsync(hub_to_warehouse_c1);
-					state = eAutoState.HUB_TO_WAREHOUSE;
-
-					// already start to run the intake
-					intakeMechanism.workFor(4500);
-					intakeMechanism.ejectForWithDelay(1500, 4500);
+					intakeMechanism.workFor(5000);
+					intakeMechanism.ejectForWithDelay(1500, 5000);
 				} else {
 					drive.followTrajectoryAsync(hub_to_park);
 					state = eAutoState.HUB_TO_PARK;
@@ -194,10 +199,54 @@ public class AutoOpV2 extends LinearOpMode {
 
 		hub_to_park 		= AssetsTrajectoryManager.load("hub_to_park");
 
+		// CAMERA INITIALIZATION
+		capstoneDetection = new CapstoneDetectPipeline();
+
+		webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+		int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+
+		camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+		camera.setPipeline(capstoneDetection);
+
+		camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+			@Override
+			public void onOpened() {
+				camera.startStreaming(1920, 1080, OpenCvCameraRotation.UPRIGHT);
+//                camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+			}
+
+			@Override
+			public void onError(int errorCode) {
+				telemetry.addLine("Camera couldn't init!!!" + "Error " + errorCode);
+			}
+		});
+
+
 		telemetry.addLine("init complete");
 		telemetry.update();
-		CASE = 1; // TODO: opencv
 
+		while(!isStarted())
+		{
+			switch (capstoneDetection.capstoneSegment)
+			{
+				case 3:
+					preloadLevel = Outtake.Level.high;
+					telemetry.addLine("high");
+					break;
+				case 2:
+					preloadLevel = Outtake.Level.mid;
+					telemetry.addLine("mid");
+					break;
+				case 1:
+					preloadLevel = Outtake.Level.low;
+					telemetry.addLine("low");
+					break;
+				default:
+					preloadLevel = Outtake.Level.high;
+					telemetry.addLine("not detected but set to high");
+			}
+			telemetry.update();
+		}
 
 	}
 }
