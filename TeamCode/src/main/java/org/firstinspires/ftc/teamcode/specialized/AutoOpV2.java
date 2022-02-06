@@ -184,7 +184,7 @@ public class AutoOpV2 extends LinearOpMode {
 				if(!drive.isBusy())
 				{
 					drive.followTrajectoryAsync(duck_to_hub);
-					outtakeMechanism.setLevel(Outtake.Level.high);
+					outtakeMechanism.setLevelWithDelay(Outtake.Level.high, 1000);
 					state = eAutoState.DUCK_TO_HUB;
 				}
 				break;

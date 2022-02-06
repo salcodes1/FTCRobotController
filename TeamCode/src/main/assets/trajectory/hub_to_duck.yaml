@@ -13,21 +13,21 @@ waypoints:
   interpolationType: "SPLINE"
 - position:
     x: -6.0
-    y: -40.0
+    y: -41.0
   heading: 0.0
   tangent: 0.0
   interpolationType: "SPLINE"
 - position:
     x: 0.0
-    y: -38.0
+    y: -37.0
   heading: 0.0
   tangent: 0.0
-  interpolationType: "SPLINE"
+  interpolationType: "TANGENT"
 - position:
-    x: 14.0
-    y: -36.0
+    x: 16.0
+    y: -37.0
   heading: 0.0
   tangent: 0.0
-  interpolationType: "SPLINE"
+  interpolationType: "LINEAR"
 resolution: 0.25
 version: 1
