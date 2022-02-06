@@ -79,6 +79,12 @@ public class AutoOpV2 extends LinearOpMode {
 		carouselMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 		carouselMotor.setPower(-0.17);
 
+		camera.closeCameraDeviceAsync(new OpenCvCamera.AsyncCameraCloseListener() {
+			@Override
+			public void onClose() {
+				telemetry.addLine("camera successfully and gracefully closed thank god");
+			}
+		});
 
 		while(opModeIsActive() && !isStopRequested())
 		{
@@ -88,6 +94,7 @@ public class AutoOpV2 extends LinearOpMode {
 			telemetry.addLine("time: " + (System.currentTimeMillis() - startTime) / 1000.0f);
 			telemetry.update();
 		}
+
 
 	}
 
@@ -124,14 +131,14 @@ public class AutoOpV2 extends LinearOpMode {
 					state = eAutoState.HUB_TO_WAREHOUSE;
 
 					// already start to run the intake
-					intakeMechanism.workFor(4500);
+					intakeMechanism.work();
 				}
 				break;
 			}
 			case HUB_TO_WAREHOUSE: {
 				if(!drive.isBusy()) {
 					outtakeMechanism.setLevelWithDelay(Outtake.Level.high, 3000);
-					intakeMechanism.ejectForWithDelay(500, 2000);
+//					intakeMechanism.complexEject(3000, 1500);
 
 					if(cycles == 0) {
 						drive.followTrajectoryAsync(warehouse_to_hub_c1);
@@ -158,7 +165,7 @@ public class AutoOpV2 extends LinearOpMode {
 					state = eAutoState.HUB_TO_WAREHOUSE;
 
 					// already start to run the intake
-					intakeMechanism.workFor(4500);
+					intakeMechanism.work();
 				} else {
 					drive.followTrajectoryAsync(hub_to_park);
 					state = eAutoState.HUB_TO_PARK;

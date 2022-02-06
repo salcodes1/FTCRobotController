@@ -58,5 +58,7 @@ public class CapstoneDetectPipeline extends OpenCvPipeline {
         Imgproc.cvtColor(input, temp, Imgproc.COLOR_RGB2HSV);
 
         Core.inRange(temp, lowHSV, highHSV, out);
+
+        temp.release();
     }
 }

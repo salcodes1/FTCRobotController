@@ -59,6 +59,12 @@ public class Intake {
 
 	}
 
+	public void work()
+	{
+		intakeMotor.setPower(-1);
+		intermediaryMotor.setPower(-1);
+	}
+
 	public void workFor(double time)
 	{
 		intakeMotor.setPower(-1);
@@ -81,6 +87,19 @@ public class Intake {
 			intakeMotor.setPower(0);
 			intermediaryMotor.setPower(0);
 			isCurrentlyWorking = false;
+		});
+	}
+
+	public void complexEject(double time, double intermediaryDelay)
+	{
+		intakeMotor.setPower(1);
+		intermediaryMotor.setPower(-1);
+		runAfter(intermediaryDelay, () -> {
+			intermediaryMotor.setPower(1);
+		});
+		runAfter(time, () -> {
+			intakeMotor.setPower(0);
+			intermediaryMotor.setPower(0);
 		});
 	}
 

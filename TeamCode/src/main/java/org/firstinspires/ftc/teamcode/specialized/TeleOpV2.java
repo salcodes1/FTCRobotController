@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.specialized;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.GamepadEx;
 import org.firstinspires.ftc.teamcode.Mecanum;
@@ -32,6 +33,9 @@ public class TeleOpV2 extends OpMode {
 	DcMotor carouselMotor;
 	boolean carouselState = false;
 
+	Servo capServo;
+	double capPosition = 0.0;
+
 	Outtake outtake;
 
 	@Override
@@ -42,6 +46,7 @@ public class TeleOpV2 extends OpMode {
 		outtake = new Outtake(this);
 
 		intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
+		capServo = hardwareMap.get(Servo.class, "capServo");
 		intermediaryMotor = hardwareMap.get(DcMotor.class, "intermediaryMotor");
 		carouselMotor = hardwareMap.get(DcMotor.class, "carouselMotor");
 	}
@@ -59,15 +64,21 @@ public class TeleOpV2 extends OpMode {
 	if(g2.getButtonDown("bumper_left")) carouselState = !carouselState;
 	if(g2.getButtonDown("a")) intakeState = !intakeState;
 
+	if(gamepad2.left_trigger > 0) capPosition -= 0.005;
+	if(gamepad2.right_trigger > 0) capPosition += 0.005;
+	capPosition = Math.min(1.0, Math.max(0.0, capPosition));
+	telemetry.addLine(Double.toString(capPosition));
+	telemetry.update();
+
 	carouselMotor.setPower(carouselState ? -0.27 : 0.0);
 	intakeMotor.setPower(g2.getButton("b") ? 1.0 : intakeState ? -1.0 : 0.0);
 	intermediaryMotor.setPower(g2.getButton("b") ? 1.0 : intakeState ? -1.0 : 0.0);
+	capServo.setPosition(capPosition);
 
 	if(g2.getButtonDown("dpad_down")) 									outtake.setLevel(Outtake.Level.low);
 	if(g2.getButtonDown("dpad_left") || g2.getButtonDown("dpad_right")) outtake.setLevel(Outtake.Level.mid);
 	if(g2.getButtonDown("dpad_up")) 									outtake.setLevel(Outtake.Level.high);
 	if(g2.getButtonDown("x")) 											outtake.drop();
-
 
 	}
 }
