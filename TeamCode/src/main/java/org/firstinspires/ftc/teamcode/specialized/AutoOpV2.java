@@ -32,7 +32,9 @@ public class AutoOpV2 extends LinearOpMode {
 		WAREHOUSE_TO_HUB,
 		OUTTAKE_RUNNING,
 		IDLE,
-		HUB_TO_PARK
+		HUB_TO_PARK,
+		HUB_TO_DUCK,
+		DUCK_TO_HUB
 	}
 	public static int CASE = 1;
 
@@ -46,6 +48,9 @@ public class AutoOpV2 extends LinearOpMode {
 
 	Trajectory start_to_carousel;
 	Trajectory carousel_to_hub;
+
+	Trajectory hub_to_duck;
+	Trajectory duck_to_hub;
 
 	Trajectory hub_to_park;
 
@@ -161,8 +166,8 @@ public class AutoOpV2 extends LinearOpMode {
 				cycles++;
 
 				if(cycles == 1) {
-					drive.followTrajectoryAsync(hub_to_warehouse_c2);
-					state = eAutoState.HUB_TO_WAREHOUSE;
+					drive.followTrajectoryAsync(hub_to_duck);
+					state = eAutoState.HUB_TO_DUCK;
 
 					// already start to run the intake
 					intakeMechanism.work();
@@ -175,6 +180,19 @@ public class AutoOpV2 extends LinearOpMode {
 			case HUB_TO_PARK:
 				break;
 
+			case HUB_TO_DUCK:
+				if(!drive.isBusy())
+				{
+					drive.followTrajectoryAsync(duck_to_hub);
+					outtakeMechanism.setLevel(Outtake.Level.high);
+					state = eAutoState.DUCK_TO_HUB;
+				}
+				break;
+			case DUCK_TO_HUB:
+				if(!drive.isBusy()) {
+					state = eAutoState.OUTTAKE_RUNNING;
+				}
+				break;
 			default:
 				break;
 		}
@@ -203,7 +221,10 @@ public class AutoOpV2 extends LinearOpMode {
 		warehouse_to_hub_c2 = AssetsTrajectoryManager.load("warehouse_to_hub_c2");
 		hub_to_warehouse_c2 = AssetsTrajectoryManager.load("hub_to_warehouse_c2");
 
-		hub_to_park 		= AssetsTrajectoryManager.load("hub_to_park");
+		hub_to_duck = AssetsTrajectoryManager.load("hub_to_duck");
+		duck_to_hub = AssetsTrajectoryManager.load("duck_to_hub");
+
+		hub_to_park 		= AssetsTrajectoryManager.load("hub_to_park_v2");
 
 		// CAMERA INITIALIZATION
 		capstoneDetection = new CapstoneDetectPipeline();

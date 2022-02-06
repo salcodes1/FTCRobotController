@@ -122,6 +122,11 @@ public class Outtake {
 		}
 	}
 
+	public boolean isBusy()
+	{
+		return motor.isBusy();
+	}
+
 	void goToTicks(int targetTicks)
 	{
 		motor.setTargetPosition(targetTicks);
