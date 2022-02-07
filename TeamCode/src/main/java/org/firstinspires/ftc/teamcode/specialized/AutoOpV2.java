@@ -222,10 +222,10 @@ public class AutoOpV2 extends LinearOpMode {
 		warehouse_to_hub_c2 = AssetsTrajectoryManager.load("warehouse_to_hub_c2");
 		hub_to_warehouse_c2 = AssetsTrajectoryManager.load("hub_to_warehouse_c2");
 
-		hub_to_duck = AssetsTrajectoryManager.load("hub_to_duck");
+		hub_to_duck = AssetsTrajectoryManager.load("hub_to_duck_v2");
 		duck_to_hub = AssetsTrajectoryManager.load("duck_to_hub");
 
-		hub_to_park 		= AssetsTrajectoryManager.load("hub_to_park_v2");
+		hub_to_park 		= AssetsTrajectoryManager.load("hub_to_park");
 
 		// CAMERA INITIALIZATION
 		capstoneDetection = new CapstoneDetectPipeline();
