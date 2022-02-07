@@ -88,6 +88,7 @@ public class Outtake {
 		hasFinished = false;
 		runAfter(delay, () -> {
 			setLevel(level);
+			hasFinished = true;
 		});
 	}
 
@@ -113,7 +114,6 @@ public class Outtake {
 
 		if(!motor.isBusy())
 		{
-			hasFinished = true;
 			motor.setPower(0);
 		}
 
@@ -129,7 +129,7 @@ public class Outtake {
 
 	public boolean hasFinished()
 	{
-		return hasFinished;
+		return hasFinished && !motor.isBusy();
 	}
 
 	void goToTicks(int targetTicks)
