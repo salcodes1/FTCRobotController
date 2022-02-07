@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.specialized;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -11,7 +10,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Intake;
 import org.firstinspires.ftc.teamcode.OpenCV.CapstoneDetectPipeline;
-import org.firstinspires.ftc.teamcode.OpenCV.InsideDetectPipeline;
 import org.firstinspires.ftc.teamcode.Outtake;
 import org.firstinspires.ftc.teamcode.RR.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RR.util.AssetsTrajectoryManager;
@@ -42,9 +40,6 @@ public class AutoOpV2 extends LinearOpMode {
 
 	Trajectory warehouse_to_hub_c1;
 	Trajectory hub_to_warehouse_c1;
-
-	Trajectory warehouse_to_hub_c2;
-	Trajectory hub_to_warehouse_c2;
 
 	Trajectory start_to_carousel;
 	Trajectory carousel_to_hub;
@@ -145,11 +140,7 @@ public class AutoOpV2 extends LinearOpMode {
 					outtakeMechanism.setLevelWithDelay(Outtake.Level.high, 3000);
 //					intakeMechanism.complexEject(3000, 1500);
 
-					if(cycles == 0) {
-						drive.followTrajectoryAsync(warehouse_to_hub_c1);
-					} else {
-						drive.followTrajectoryAsync(warehouse_to_hub_c2);
-					}
+					drive.followTrajectoryAsync(warehouse_to_hub_c1);
 
 					state = eAutoState.WAREHOUSE_TO_HUB;
 				}
@@ -185,12 +176,12 @@ public class AutoOpV2 extends LinearOpMode {
 				if(!drive.isBusy())
 				{
 					drive.followTrajectoryAsync(duck_to_hub);
-					outtakeMechanism.setLevelWithDelay(Outtake.Level.high, 1000);
+					outtakeMechanism.setLevelWithDelay(Outtake.Level.high, 1500);
 					state = eAutoState.DUCK_TO_HUB;
 				}
 				break;
 			case DUCK_TO_HUB:
-				if(!drive.isBusy()) {
+				if(!drive.isBusy() && outtakeMechanism.hasFinished()) {
 					state = eAutoState.OUTTAKE_RUNNING;
 				}
 				break;
@@ -218,9 +209,6 @@ public class AutoOpV2 extends LinearOpMode {
 
 		warehouse_to_hub_c1 = AssetsTrajectoryManager.load("warehouse_to_hub_c1");
 		hub_to_warehouse_c1 = AssetsTrajectoryManager.load("hub_to_warehouse_c1");
-
-		warehouse_to_hub_c2 = AssetsTrajectoryManager.load("warehouse_to_hub_c2");
-		hub_to_warehouse_c2 = AssetsTrajectoryManager.load("hub_to_warehouse_c2");
 
 		hub_to_duck = AssetsTrajectoryManager.load("hub_to_duck_v2");
 		duck_to_hub = AssetsTrajectoryManager.load("duck_to_hub");
