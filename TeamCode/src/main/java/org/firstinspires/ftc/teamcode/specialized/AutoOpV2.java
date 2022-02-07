@@ -173,6 +173,7 @@ public class AutoOpV2 extends LinearOpMode {
 					intakeMechanism.work();
 				} else {
 					drive.followTrajectoryAsync(hub_to_park);
+					intakeMechanism.stop();
 					state = eAutoState.HUB_TO_PARK;
 				}
 				break;
