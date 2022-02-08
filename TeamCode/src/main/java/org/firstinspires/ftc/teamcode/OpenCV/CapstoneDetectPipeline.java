@@ -13,10 +13,10 @@ public class CapstoneDetectPipeline extends OpenCvPipeline {
 
     Mat viewport = new Mat();
 
-
     @Override
     public Mat processFrame(Mat input) {
         int third = input.cols() / 3;
+
 
         Range wholeHeight = new Range(0, input.rows() - 1);
         Range segment1Range = new Range(0, third - 1);
