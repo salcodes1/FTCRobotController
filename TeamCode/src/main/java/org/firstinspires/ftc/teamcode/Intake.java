@@ -120,6 +120,12 @@ public class Intake {
 		actionQueue.add(new runAfter(runAfter + System.currentTimeMillis(), action));
 	}
 
+	public void stop()
+	{
+		intakeMotor.setPower(0);
+		intermediaryMotor.setPower(0);
+	}
+
 	public void update()
 	{
 

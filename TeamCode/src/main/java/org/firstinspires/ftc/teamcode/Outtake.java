@@ -31,6 +31,8 @@ public class Outtake {
 
 	ArrayList<runAfter> actionQueue;
 
+	boolean hasFinished = true;
+
 
 	public enum Level {
 		low,
@@ -60,7 +62,6 @@ public class Outtake {
 	}
 
 	public void setLevel(Level level) {
-
 		currentLevel = level;
 		switch (level) {
 
@@ -84,8 +85,10 @@ public class Outtake {
 
 	public void setLevelWithDelay(Level level, double delay)
 	{
+		hasFinished = false;
 		runAfter(delay, () -> {
 			setLevel(level);
+			hasFinished = true;
 		});
 	}
 
@@ -110,7 +113,9 @@ public class Outtake {
 	{
 
 		if(!motor.isBusy())
+		{
 			motor.setPower(0);
+		}
 
 		for(int i = 0; i < actionQueue.size(); i++)
 		{
@@ -122,9 +127,9 @@ public class Outtake {
 		}
 	}
 
-	public boolean isBusy()
+	public boolean hasFinished()
 	{
-		return motor.isBusy();
+		return hasFinished && !motor.isBusy();
 	}
 
 	void goToTicks(int targetTicks)
