@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.specialized;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
@@ -90,6 +91,7 @@ public class AutoOpV1 extends LinearOpMode {
                 break;
             }
             case CAROUSEL_RUNNING: {
+
                 if(!carouselMotor.isBusy()) {
                     carouselMotor.setPower(0);
                     drive.followTrajectoryAsync(carousel_to_hub);
@@ -160,6 +162,8 @@ public class AutoOpV1 extends LinearOpMode {
 
 
     private void runInit() {
+        telemetry = new MultipleTelemetry(telemetry);
+
         drive = new SampleMecanumDrive(hardwareMap);
         intakeMechanism = new IntakeMechanism(this);
         outtakeMechanism = new OuttakeMechanism(this);

@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.OpenCV.CapstoneDetectPipeline;
 import org.firstinspires.ftc.teamcode.Outtake;
 import org.firstinspires.ftc.teamcode.RR.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RR.util.AssetsTrajectoryManager;
+import org.firstinspires.ftc.teamcode.mechanisms.IntakeMechanism;
 import org.firstinspires.ftc.teamcode.statics.PoseStorage;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -32,9 +33,9 @@ public class AutoOpV2 extends LinearOpMode {
 		IDLE,
 		HUB_TO_PARK,
 		HUB_TO_DUCK,
+		WAREHOUSE_INTAKE_RUNNING,
 		DUCK_TO_HUB
 	}
-	public static int CASE = 1;
 
 	SampleMecanumDrive drive;
 
@@ -49,7 +50,7 @@ public class AutoOpV2 extends LinearOpMode {
 
 	Trajectory hub_to_park;
 
-	Intake intakeMechanism;
+	IntakeMechanism intakeMechanism;
 	Outtake outtakeMechanism;
 
 	DcMotor carouselMotor;
@@ -61,6 +62,9 @@ public class AutoOpV2 extends LinearOpMode {
 	OpenCvCamera camera;
 
 	Outtake.Level preloadLevel = Outtake.Level.high;
+
+	DcMotor intermediaryMotor;
+
 
 	int cycles = 0;
 
@@ -78,6 +82,7 @@ public class AutoOpV2 extends LinearOpMode {
 		carouselMotor.setTargetPosition(-1350);
 		carouselMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 		carouselMotor.setPower(-0.17);
+		intermediaryMotor.setPower(1);
 
 		camera.closeCameraDeviceAsync(new OpenCvCamera.AsyncCameraCloseListener() {
 			@Override
@@ -90,7 +95,6 @@ public class AutoOpV2 extends LinearOpMode {
 		{
 			run();
 			outtakeMechanism.update();
-			intakeMechanism.update();
 			telemetry.addLine("time: " + (System.currentTimeMillis() - startTime) / 1000.0f);
 			telemetry.update();
 		}
@@ -120,6 +124,8 @@ public class AutoOpV2 extends LinearOpMode {
 					carouselMotor.setPower(0);
 					drive.followTrajectoryAsync(carousel_to_hub);
 					state = eAutoState.CAROUSEL_TO_HUB;
+				} else if(carouselMotor.getTargetPosition() < -625) {
+					carouselMotor.setPower(-0.51);
 				}
 				break;
 			}
@@ -131,17 +137,20 @@ public class AutoOpV2 extends LinearOpMode {
 					state = eAutoState.HUB_TO_WAREHOUSE;
 
 					// already start to run the intake
-					intakeMechanism.work();
+					intakeMechanism.startWorkAsync(-1);
 				}
 				break;
 			}
 			case HUB_TO_WAREHOUSE: {
 				if(!drive.isBusy()) {
-					outtakeMechanism.setLevelWithDelay(Outtake.Level.high, 3000);
-//					intakeMechanism.complexEject(3000, 1500);
-
+					state = eAutoState.WAREHOUSE_INTAKE_RUNNING;
+				}
+				break;
+			}
+			case WAREHOUSE_INTAKE_RUNNING: {
+				if(intakeMechanism.workHasFinished()) {
+					outtakeMechanism.setLevel(Outtake.Level.high);
 					drive.followTrajectoryAsync(warehouse_to_hub_c1);
-
 					state = eAutoState.WAREHOUSE_TO_HUB;
 				}
 				break;
@@ -156,15 +165,19 @@ public class AutoOpV2 extends LinearOpMode {
 				outtakeMechanism.dropFor(200);
 				cycles++;
 
-				if(cycles == 1) {
+				if(cycles == 2) {
 					drive.followTrajectoryAsync(hub_to_duck);
 					state = eAutoState.HUB_TO_DUCK;
 
 					// already start to run the intake
-					intakeMechanism.work();
+					intakeMechanism.startWorkAsync(-1);
+				} else if(cycles == 1) {
+					drive.followTrajectoryAsync(hub_to_warehouse_c1);
+					state = eAutoState.HUB_TO_WAREHOUSE;
+					intakeMechanism.startWorkAsync(-1);
 				} else {
 					drive.followTrajectoryAsync(hub_to_park);
-					intakeMechanism.stop();
+					intakeMechanism.interruptWork();
 					state = eAutoState.HUB_TO_PARK;
 				}
 				break;
@@ -196,9 +209,10 @@ public class AutoOpV2 extends LinearOpMode {
 
 	private void runInit() {
 		drive = new SampleMecanumDrive(hardwareMap);
-		intakeMechanism = new Intake(this);
+		intakeMechanism = new IntakeMechanism(this);
 		outtakeMechanism = new Outtake(this);
 
+		intermediaryMotor = hardwareMap.get(DcMotor.class, "intermediaryMotor");
 		carouselMotor = hardwareMap.get(DcMotor.class, "carouselMotor");
 		carouselMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 

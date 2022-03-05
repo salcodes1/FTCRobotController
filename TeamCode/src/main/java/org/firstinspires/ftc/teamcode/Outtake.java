@@ -49,8 +49,6 @@ public class Outtake {
 
 	public Outtake(OpMode opMode)
 	{
-		opMode = opMode;
-
 		actionQueue = new ArrayList<>();
 
 		motor = opMode.hardwareMap.get(DcMotor.class, "elevationMotor");
@@ -58,7 +56,7 @@ public class Outtake {
 
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-		servo.setPosition(0.6);
+		servo.setPosition(0.4);
 	}
 
 	public void setLevel(Level level) {
@@ -66,15 +64,15 @@ public class Outtake {
 		switch (level) {
 
 			case low:
-				servo.setPosition(0.6);
+				servo.setPosition(0.4);
 				goToTicks(LOW_TICKS);
 				break;
 			case mid:
-				servo.setPosition(0.6);
+				servo.setPosition(0.4);
 				goToTicks(MID_TICKS);
 				break;
 			case high:
-				servo.setPosition(0.6);
+				servo.setPosition(0.4);
 				goToTicks(HIGH_TICKS);
 				break;
 			case loading:
@@ -100,7 +98,7 @@ public class Outtake {
 	public void dropFor(int time)
 	{
 		servo.setPosition(currentLevel == Level.low ? 0.2 :  0.3);
-		runAfter(time, () -> { servo.setPosition(1); });
+		runAfter(time, () -> { servo.setPosition(0.7); });
 		runAfter(time + 400, () -> { setLevel(Level.loading); });
 	}
 

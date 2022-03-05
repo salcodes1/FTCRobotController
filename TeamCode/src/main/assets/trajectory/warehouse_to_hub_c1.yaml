@@ -1,13 +1,13 @@
 ---
 startPose:
   x: 43.0
-  y: -65.7
+  y: -67.7
   heading: 0.0
 startTangent: 3.141592653589793
 waypoints:
 - position:
     x: 17.0
-    y: -65.7
+    y: -67.7
   heading: 0.0
   tangent: 3.141592653589793
   interpolationType: "CONSTANT"

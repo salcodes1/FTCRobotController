@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.specialized;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -20,8 +21,7 @@ import org.firstinspires.ftc.teamcode.mechanisms.OuttakeMechanism;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-@Disabled
-@TeleOp(name = "TeleOp Version 0.1")
+@TeleOp()
 public class TeleOpV1 extends OpMode {
 
 //    SampleMecanumDrive drive;
@@ -35,17 +35,16 @@ public class TeleOpV1 extends OpMode {
 
     private PIDFController headingController = new PIDFController(SampleMecanumDrive.HEADING_PID);
 
-    Servo capServo;
 
     @Override
     public void init() {
 //        drive = new SampleMecanumDrive(hardwareMap);
         drive = new Mecanum(this);
         state = new AtomicReference<>(WorkState.SELECT_LEVEL_AND_CONFIRM);
+        telemetry = new MultipleTelemetry(telemetry);
         intakeMechanism = new IntakeMechanism(this);
         outtakeMechanism = new OuttakeMechanism(this);
         carouselMotor = hardwareMap.get(DcMotor.class, "carouselMotor");
-        capServo = hardwareMap.get(Servo.class, "capServo");
 
         headingController.setInputBounds(-Math.PI, Math.PI);
     }
@@ -97,10 +96,6 @@ public class TeleOpV1 extends OpMode {
         }
         bumperLeftState = gamepad1.left_bumper;
 
-        if(gamepad1.right_bumper)
-            capServo.setPosition(1);
-        else
-            capServo.setPosition(0 );
         workflow();
 
 //        if(gamepad1.y) {

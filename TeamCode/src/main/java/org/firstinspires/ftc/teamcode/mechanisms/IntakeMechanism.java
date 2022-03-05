@@ -4,8 +4,11 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorDigitalTouch;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.OpenCV.InsideDetectPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -31,6 +34,10 @@ public class IntakeMechanism {
     public static double INTAKE_SERVO_ENGAGED_POS = 1.0f;
     public static double INTAKE_SERVO_IDLE_POS = 0.0f;
 
+    public static String TOUCH_SENSOR_1_NAME = "touchSensor1";
+    public static String TOUCH_SENSOR_2_NAME = "touchSensor2";
+
+
     Thread workThread;
     volatile boolean lastResult;
 
@@ -38,38 +45,44 @@ public class IntakeMechanism {
     DcMotor intakeMotor, intermediaryMotor;
     Servo intakeServo;
 
+    DigitalChannel touchSensor1, touchSensor2;
 
-    WebcamName webcamName;
-    OpenCvCamera camera;
-    InsideDetectPipeline insideDetectPipeline;
+
+//    WebcamName webcamName;
+//    OpenCvCamera camera;
+//    InsideDetectPipeline insideDetectPipeline;
 
     OpMode opMode;
 
     int elementsCount = 0;
 
     public IntakeMechanism(OpMode opMode) {
-        insideDetectPipeline = new InsideDetectPipeline(opMode.telemetry);
-
 
         this.opMode = opMode;
 
+//        insideDetectPipeline = new InsideDetectPipeline(opMode.telemetry);
 
-        webcamName = opMode.hardwareMap.get(WebcamName.class, "Webcam 1");
-        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName);
-        camera.setPipeline(insideDetectPipeline);
 
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {
-                camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
-//                camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
-            }
 
-            @Override
-            public void onError(int errorCode) {
-                opMode.telemetry.addLine("Camera couldn't init!!!" + "Error " + errorCode);
-            }
-        });
+
+
+//        int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
+//        webcamName = opMode.hardwareMap.get(WebcamName.class, "Webcam 1");
+//        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+//        camera.setPipeline(insideDetectPipeline);
+
+//        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+//            @Override
+//            public void onOpened() {
+//                camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
+////                camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+//            }
+//
+//            @Override
+//            public void onError(int errorCode) {
+//                opMode.telemetry.addLine("Camera couldn't init!!!" + "Error " + errorCode);
+//            }
+//        });
 
         intakeMotor = opMode.hardwareMap.get(DcMotor.class, INTAKE_MOTOR_NAME);
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -79,6 +92,11 @@ public class IntakeMechanism {
 
         intermediaryMotor = opMode.hardwareMap.get(DcMotor.class, INTERMEDIARY_MOTOR_NAME);
 
+        touchSensor1 = opMode.hardwareMap.get(DigitalChannel.class, TOUCH_SENSOR_1_NAME);
+        touchSensor2 = opMode.hardwareMap.get(DigitalChannel.class, TOUCH_SENSOR_2_NAME);
+
+        touchSensor1.setMode(DigitalChannel.Mode.INPUT);
+        touchSensor1.setMode(DigitalChannel.Mode.INPUT);
     }
 
     public boolean workHasFinished() {
@@ -109,9 +127,8 @@ public class IntakeMechanism {
             intermediaryMotor.setPower(INTERMEDIARY_MOTOR_POWER);
 
             while(!Thread.interrupted()) {
-                camera.openCameraDevice();
 
-                if(insideDetectPipeline.pieceInside()) {
+                if(touchSensor1.getState() || touchSensor2.getState()) {
                     elementsCount++;
                     lastResult = true;
                     break;
@@ -120,13 +137,6 @@ public class IntakeMechanism {
             }
 
             intakeServo.setPosition(INTAKE_SERVO_IDLE_POS);
-            Thread.sleep(200);
-            // inverting the direction so it doesnt take any other elems
-            intakeMotor.setPower(-INTAKE_MOTOR_POWER);
-            Thread.sleep(1500);
-            intakeMotor.setPower(0);
-            Thread.sleep(1500);
-        } catch (InterruptedException ignored) {
         } finally {
             intakeMotor.setPower(0);
             intakeServo.setPosition(INTAKE_SERVO_IDLE_POS);
