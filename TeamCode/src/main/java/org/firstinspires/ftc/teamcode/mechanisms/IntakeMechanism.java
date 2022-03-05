@@ -37,6 +37,7 @@ public class IntakeMechanism {
     public static String TOUCH_SENSOR_1_NAME = "touchSensor1";
     public static String TOUCH_SENSOR_2_NAME = "touchSensor2";
 
+    boolean hasFinished = false;
 
     Thread workThread;
     volatile boolean lastResult;
@@ -47,11 +48,6 @@ public class IntakeMechanism {
 
     DigitalChannel touchSensor1, touchSensor2;
 
-
-//    WebcamName webcamName;
-//    OpenCvCamera camera;
-//    InsideDetectPipeline insideDetectPipeline;
-
     OpMode opMode;
 
     int elementsCount = 0;
@@ -59,30 +55,6 @@ public class IntakeMechanism {
     public IntakeMechanism(OpMode opMode) {
 
         this.opMode = opMode;
-
-//        insideDetectPipeline = new InsideDetectPipeline(opMode.telemetry);
-
-
-
-
-
-//        int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
-//        webcamName = opMode.hardwareMap.get(WebcamName.class, "Webcam 1");
-//        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-//        camera.setPipeline(insideDetectPipeline);
-
-//        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-//            @Override
-//            public void onOpened() {
-//                camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
-////                camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
-//            }
-//
-//            @Override
-//            public void onError(int errorCode) {
-//                opMode.telemetry.addLine("Camera couldn't init!!!" + "Error " + errorCode);
-//            }
-//        });
 
         intakeMotor = opMode.hardwareMap.get(DcMotor.class, INTAKE_MOTOR_NAME);
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -100,7 +72,7 @@ public class IntakeMechanism {
     }
 
     public boolean workHasFinished() {
-        return workThread == null || (!workThread.isAlive());
+        return workThread == null || (!workThread.isAlive()) || hasFinished;
     }
 
     public boolean getLastResult() { return lastResult; }
@@ -117,11 +89,9 @@ public class IntakeMechanism {
 
     void actionate()
     {
-
+        hasFinished = false;
         lastResult = false;
         try {
-            // (positively?) insane method for changing a variable in inner and reading it in outer
-
             intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
             intakeMotor.setPower(INTAKE_MOTOR_POWER);
             intermediaryMotor.setPower(INTERMEDIARY_MOTOR_POWER);
@@ -135,15 +105,18 @@ public class IntakeMechanism {
                 }
                 Thread.yield();
             }
-
+            hasFinished = true;
             intakeServo.setPosition(INTAKE_SERVO_IDLE_POS);
-        } finally {
-            intakeMotor.setPower(0);
-            intakeServo.setPosition(INTAKE_SERVO_IDLE_POS);
-            intermediaryMotor.setPower(0);
+        }
+        finally {
+            hasFinished = true;
         }
     }
 
+    public void haltMotors() {
+        intakeMotor.setPower(0);
+        intakeServo.setPosition(INTAKE_SERVO_IDLE_POS);
+    }
     public void startWorkAsync(long timeout) {
         if(!workHasFinished()) return;
 

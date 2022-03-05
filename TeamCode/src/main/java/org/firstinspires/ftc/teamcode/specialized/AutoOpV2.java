@@ -2,16 +2,17 @@ package org.firstinspires.ftc.teamcode.specialized;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Intake;
 import org.firstinspires.ftc.teamcode.OpenCV.CapstoneDetectPipeline;
 import org.firstinspires.ftc.teamcode.Outtake;
 import org.firstinspires.ftc.teamcode.RR.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.RR.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.RR.util.AssetsTrajectoryManager;
 import org.firstinspires.ftc.teamcode.mechanisms.IntakeMechanism;
 import org.firstinspires.ftc.teamcode.statics.PoseStorage;
@@ -26,7 +27,7 @@ public class AutoOpV2 extends LinearOpMode {
 	enum eAutoState {
 		START_TO_CAROUSEL,
 		CAROUSEL_RUNNING,
-		CAROUSEL_TO_HUB,
+		CAROUSEL_TO_WAREHOUSE_ONE_TAKE,
 		HUB_TO_WAREHOUSE,
 		WAREHOUSE_TO_HUB,
 		OUTTAKE_RUNNING,
@@ -44,6 +45,8 @@ public class AutoOpV2 extends LinearOpMode {
 
 	Trajectory start_to_carousel;
 	Trajectory carousel_to_hub;
+
+	TrajectorySequence carousel_to_warehouse_one_take;
 
 	Trajectory hub_to_duck;
 	Trajectory duck_to_hub;
@@ -122,22 +125,19 @@ public class AutoOpV2 extends LinearOpMode {
 			case CAROUSEL_RUNNING: {
 				if(!carouselMotor.isBusy()) {
 					carouselMotor.setPower(0);
-					drive.followTrajectoryAsync(carousel_to_hub);
-					state = eAutoState.CAROUSEL_TO_HUB;
-				} else if(carouselMotor.getTargetPosition() < -625) {
-					carouselMotor.setPower(-0.51);
+					drive.followTrajectorySequenceAsync(carousel_to_warehouse_one_take);
+					state = eAutoState.CAROUSEL_TO_WAREHOUSE_ONE_TAKE;
+					intakeMechanism.startWorkAsync(-1);
+				} else if(carouselMotor.getTargetPosition() < -700) {
+					carouselMotor.setPower(-0.30);
 				}
 				break;
 			}
 
-			case CAROUSEL_TO_HUB: {
+			case CAROUSEL_TO_WAREHOUSE_ONE_TAKE: {
 				if(!drive.isBusy()) {
-					outtakeMechanism.dropFor(200);
-					drive.followTrajectoryAsync(hub_to_warehouse_c1);
-					state = eAutoState.HUB_TO_WAREHOUSE;
-
-					// already start to run the intake
-					intakeMechanism.startWorkAsync(-1);
+					drive.followTrajectoryAsync(warehouse_to_hub_c1);
+					state = eAutoState.WAREHOUSE_TO_HUB;
 				}
 				break;
 			}
@@ -157,6 +157,7 @@ public class AutoOpV2 extends LinearOpMode {
 			}
 			case WAREHOUSE_TO_HUB: {
 				if(!drive.isBusy()) {
+					intakeMechanism.haltMotors();
 					state = eAutoState.OUTTAKE_RUNNING;
 				}
 				break;
@@ -227,7 +228,13 @@ public class AutoOpV2 extends LinearOpMode {
 		hub_to_duck = AssetsTrajectoryManager.load("hub_to_duck_v2");
 		duck_to_hub = AssetsTrajectoryManager.load("duck_to_hub");
 
-		hub_to_park 		= AssetsTrajectoryManager.load("hub_to_park");
+		hub_to_park = AssetsTrajectoryManager.load("hub_to_park");
+
+		carousel_to_warehouse_one_take = drive.trajectorySequenceBuilder(new Pose2d(-61, -60, Math.toRadians(180)))
+				.addTrajectory(AssetsTrajectoryManager.load("carousel_to_warehouse_one_take"))
+				.addSpatialMarker(new Vector2d(-18, -46), () -> {
+					outtakeMechanism.dropFor(200);
+				}).build();
 
 		// CAMERA INITIALIZATION
 		capstoneDetection = new CapstoneDetectPipeline();

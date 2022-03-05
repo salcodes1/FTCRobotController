@@ -18,12 +18,12 @@ public class RVMWebSocket extends NanoWSD.WebSocket {
 
     @Override
     protected void onOpen() {
-        RVMInstance.getInstance().addNewSocket(this);
+//        RVMInstance.getInstance().addNewSocket(this);
     }
 
     @Override
     protected void onClose(NanoWSD.WebSocketFrame.CloseCode code, String reason, boolean initiatedByRemote) {
-        RVMInstance.getInstance().removeDeadSocket(this);
+//        RVMInstance.getInstance().removeDeadSocket(this);
     }
 
     @Override
