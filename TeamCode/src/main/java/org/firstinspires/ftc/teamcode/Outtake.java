@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.teamcode.mechanisms.OuttakeMechanism;
 
 import java.util.ArrayList;
 
+@Config
 public class Outtake {
 
 	public DcMotor motor;
@@ -47,10 +49,13 @@ public class Outtake {
 	int MID_TICKS = 500;
 	int HIGH_TICKS = 1200;
 
+	public static double SERVO_ARMED = 0.4;
+	public static double SERVO_DROP_LOW = 0.05;
+	public static double SERVO_DROP_NORMAL = 0.05;
+	public static double SERVO_LOADING = 0.61;
+
 	public Outtake(OpMode opMode)
 	{
-		opMode = opMode;
-
 		actionQueue = new ArrayList<>();
 
 		motor = opMode.hardwareMap.get(DcMotor.class, "elevationMotor");
@@ -58,7 +63,7 @@ public class Outtake {
 
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-		servo.setPosition(0.6);
+		servo.setPosition(SERVO_ARMED);
 	}
 
 	public void setLevel(Level level) {
@@ -66,15 +71,15 @@ public class Outtake {
 		switch (level) {
 
 			case low:
-				servo.setPosition(0.6);
+				servo.setPosition(SERVO_ARMED);
 				goToTicks(LOW_TICKS);
 				break;
 			case mid:
-				servo.setPosition(0.6);
+				servo.setPosition(SERVO_ARMED);
 				goToTicks(MID_TICKS);
 				break;
 			case high:
-				servo.setPosition(0.6);
+				servo.setPosition(SERVO_ARMED);
 				goToTicks(HIGH_TICKS);
 				break;
 			case loading:
@@ -88,7 +93,6 @@ public class Outtake {
 		hasFinished = false;
 		runAfter(delay, () -> {
 			setLevel(level);
-			hasFinished = true;
 		});
 	}
 
@@ -99,8 +103,8 @@ public class Outtake {
 
 	public void dropFor(int time)
 	{
-		servo.setPosition(currentLevel == Level.low ? 0.2 :  0.3);
-		runAfter(time, () -> { servo.setPosition(1); });
+		servo.setPosition(currentLevel == Level.low ? SERVO_DROP_LOW :  SERVO_DROP_NORMAL);
+		runAfter(time, () -> { servo.setPosition(SERVO_LOADING); });
 		runAfter(time + 400, () -> { setLevel(Level.loading); });
 	}
 
@@ -114,6 +118,7 @@ public class Outtake {
 
 		if(!motor.isBusy())
 		{
+			hasFinished = true;
 			motor.setPower(0);
 		}
 
@@ -129,7 +134,7 @@ public class Outtake {
 
 	public boolean hasFinished()
 	{
-		return hasFinished && !motor.isBusy();
+		return hasFinished;
 	}
 
 	void goToTicks(int targetTicks)
@@ -137,7 +142,7 @@ public class Outtake {
 		motor.setTargetPosition(targetTicks);
 		motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-		motor.setPower(0.75);
+		motor.setPower(1);
 
 	}
 }

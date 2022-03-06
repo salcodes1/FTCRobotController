@@ -22,6 +22,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 @Autonomous
 public class AutoOpV2 extends LinearOpMode {
 
+
 	enum eAutoState {
 		START_TO_CAROUSEL,
 		CAROUSEL_RUNNING,
@@ -48,6 +49,7 @@ public class AutoOpV2 extends LinearOpMode {
 	Trajectory duck_to_hub;
 
 	Trajectory hub_to_park;
+	Trajectory warehouse_to_hub_c2;
 
 	Intake intakeMechanism;
 	Outtake outtakeMechanism;
@@ -92,6 +94,7 @@ public class AutoOpV2 extends LinearOpMode {
 			outtakeMechanism.update();
 			intakeMechanism.update();
 			telemetry.addLine("time: " + (System.currentTimeMillis() - startTime) / 1000.0f);
+			telemetry.addData("cycles", cycles);
 			telemetry.update();
 		}
 
@@ -126,7 +129,7 @@ public class AutoOpV2 extends LinearOpMode {
 
 			case CAROUSEL_TO_HUB: {
 				if(!drive.isBusy()) {
-					outtakeMechanism.dropFor(200);
+					outtakeMechanism.dropFor(150);
 					drive.followTrajectoryAsync(hub_to_warehouse_c1);
 					state = eAutoState.HUB_TO_WAREHOUSE;
 
@@ -137,10 +140,11 @@ public class AutoOpV2 extends LinearOpMode {
 			}
 			case HUB_TO_WAREHOUSE: {
 				if(!drive.isBusy()) {
-					outtakeMechanism.setLevelWithDelay(Outtake.Level.high, 3000);
-//					intakeMechanism.complexEject(3000, 1500);
-
-					drive.followTrajectoryAsync(warehouse_to_hub_c1);
+					outtakeMechanism.setLevelWithDelay(Outtake.Level.high, 2500);
+					if(cycles == 2)
+						drive.followTrajectoryAsync(warehouse_to_hub_c2);
+					else
+						drive.followTrajectoryAsync(warehouse_to_hub_c1);
 
 					state = eAutoState.WAREHOUSE_TO_HUB;
 				}
@@ -156,16 +160,20 @@ public class AutoOpV2 extends LinearOpMode {
 				outtakeMechanism.dropFor(200);
 				cycles++;
 
-				if(cycles == 1) {
+				if(cycles == 2) {
 					drive.followTrajectoryAsync(hub_to_duck);
 					state = eAutoState.HUB_TO_DUCK;
 
 					// already start to run the intake
 					intakeMechanism.work();
+				} else if(cycles == 1) {
+					state = eAutoState.HUB_TO_WAREHOUSE;
+					drive.followTrajectoryAsync(hub_to_warehouse_c1);
+					intakeMechanism.work();
 				} else {
-					drive.followTrajectoryAsync(hub_to_park);
-					intakeMechanism.stop();
-					state = eAutoState.HUB_TO_PARK;
+						drive.followTrajectoryAsync(hub_to_park);
+						intakeMechanism.stop();
+						state = eAutoState.HUB_TO_PARK;
 				}
 				break;
 			}
@@ -176,12 +184,13 @@ public class AutoOpV2 extends LinearOpMode {
 				if(!drive.isBusy())
 				{
 					drive.followTrajectoryAsync(duck_to_hub);
-					outtakeMechanism.setLevelWithDelay(Outtake.Level.high, 1500);
+					outtakeMechanism.setLevelWithDelay(Outtake.Level.high, 1300);
 					state = eAutoState.DUCK_TO_HUB;
 				}
 				break;
 			case DUCK_TO_HUB:
 				if(!drive.isBusy() && outtakeMechanism.hasFinished()) {
+
 					state = eAutoState.OUTTAKE_RUNNING;
 				}
 				break;
@@ -209,6 +218,8 @@ public class AutoOpV2 extends LinearOpMode {
 
 		warehouse_to_hub_c1 = AssetsTrajectoryManager.load("warehouse_to_hub_c1");
 		hub_to_warehouse_c1 = AssetsTrajectoryManager.load("hub_to_warehouse_c1");
+
+		warehouse_to_hub_c2 = AssetsTrajectoryManager.load("warehouse_to_hub_c2");
 
 		hub_to_duck = AssetsTrajectoryManager.load("hub_to_duck_v2");
 		duck_to_hub = AssetsTrajectoryManager.load("duck_to_hub");
