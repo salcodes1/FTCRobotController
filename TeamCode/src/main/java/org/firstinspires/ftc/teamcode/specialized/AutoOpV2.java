@@ -141,7 +141,7 @@ public class AutoOpV2 extends LinearOpMode {
 			case HUB_TO_WAREHOUSE: {
 				if(!drive.isBusy()) {
 					outtakeMechanism.setLevelWithDelay(Outtake.Level.high, 2500);
-					if(cycles == 2)
+					if(cycles == 1)
 						drive.followTrajectoryAsync(warehouse_to_hub_c2);
 					else
 						drive.followTrajectoryAsync(warehouse_to_hub_c1);
