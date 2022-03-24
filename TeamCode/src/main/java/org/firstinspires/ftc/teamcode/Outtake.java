@@ -67,6 +67,7 @@ public class Outtake {
 	}
 
 	public void setLevel(Level level) {
+		hasFinished = false;
 		currentLevel = level;
 		switch (level) {
 
@@ -90,7 +91,6 @@ public class Outtake {
 
 	public void setLevelWithDelay(Level level, double delay)
 	{
-		hasFinished = false;
 		runAfter(delay, () -> {
 			setLevel(level);
 		});
