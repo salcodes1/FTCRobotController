@@ -1,14 +1,14 @@
 package org.firstinspires.ftc.teamcode.bt.actions.controlflow;
 
 import org.firstinspires.ftc.teamcode.bt.Action;
-import org.firstinspires.ftc.teamcode.bt.AutoRobot;
+import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
 
 public class RunInline extends Action {
 
     private Exec exec;
 
     public interface Exec {
-        void call(AutoRobot context);
+        void call(AutonomousOpMode context);
     }
 
     public RunInline(Exec exec) {
@@ -16,22 +16,22 @@ public class RunInline extends Action {
     }
 
     @Override
-    public void _start(AutoRobot context) {
+    public void _start(AutonomousOpMode context) {
         exec.call(context);
     }
 
     @Override
-    public void _tick(AutoRobot context) {
+    public void _tick(AutonomousOpMode context) {
 
     }
 
     @Override
-    public boolean _hasFinished(AutoRobot context) {
+    public boolean _hasFinished(AutonomousOpMode context) {
         return false;
     }
 
     @Override
-    public void _end(AutoRobot context) {
+    public void _end(AutonomousOpMode context) {
 
     }
 }

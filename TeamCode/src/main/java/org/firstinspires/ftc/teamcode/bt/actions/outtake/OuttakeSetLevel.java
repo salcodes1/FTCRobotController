@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.bt.actions.outtake;
 
 import org.firstinspires.ftc.teamcode.Outtake;
 import org.firstinspires.ftc.teamcode.bt.Action;
-import org.firstinspires.ftc.teamcode.bt.AutoRobot;
+import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
 
 public class OuttakeSetLevel extends Action {
 
@@ -13,20 +13,20 @@ public class OuttakeSetLevel extends Action {
         }
 
         @Override
-        public void _start(AutoRobot context) {
+        public void _start(AutonomousOpMode context) {
             context.outtake.setLevel(level);
         }
 
         @Override
-        public void _tick(AutoRobot state) { }
+        public void _tick(AutonomousOpMode state) { }
 
         @Override
-        public boolean _hasFinished(AutoRobot state) {
+        public boolean _hasFinished(AutonomousOpMode state) {
             return state.outtake.hasFinished();
         }
 
         @Override
-        public void _end(AutoRobot state) {
+        public void _end(AutonomousOpMode state) {
 //            state.outtake.motor.setPower(0);
         }
     }

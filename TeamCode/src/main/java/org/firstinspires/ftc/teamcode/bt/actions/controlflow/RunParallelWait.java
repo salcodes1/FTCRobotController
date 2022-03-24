@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.bt.actions.controlflow;
 
 import org.firstinspires.ftc.teamcode.bt.Action;
-import org.firstinspires.ftc.teamcode.bt.AutoRobot;
+import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
 
 import java.util.HashMap;
 
@@ -14,7 +14,7 @@ public class RunParallelWait extends Action {
     }
 
     @Override
-    public void _start(AutoRobot context) {
+    public void _start(AutonomousOpMode context) {
         hasFinished = new HashMap<>();
         for (Action action : childActions) {
             action.start(context);
@@ -22,7 +22,7 @@ public class RunParallelWait extends Action {
     }
 
     @Override
-    public void _tick(AutoRobot context) {
+    public void _tick(AutonomousOpMode context) {
         for (Action action : childActions) {
             if(!hasFinished.getOrDefault(action, false)) {
                 if(action.hasFinished(context)) {
@@ -34,7 +34,7 @@ public class RunParallelWait extends Action {
     }
 
     @Override
-    public boolean _hasFinished(AutoRobot context) {
+    public boolean _hasFinished(AutonomousOpMode context) {
         int matches = 0;
 
         for(boolean finished : hasFinished.values()) {
@@ -45,7 +45,7 @@ public class RunParallelWait extends Action {
     }
 
     @Override
-    public void _end(AutoRobot context) {
+    public void _end(AutonomousOpMode context) {
         for (Action a : childActions) {
             if(!a.hasFinished(context)) {
                 a.end(context);

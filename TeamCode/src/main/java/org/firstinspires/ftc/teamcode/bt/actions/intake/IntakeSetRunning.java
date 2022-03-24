@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.bt.actions.intake;
 
 import org.firstinspires.ftc.teamcode.bt.Action;
-import org.firstinspires.ftc.teamcode.bt.AutoRobot;
+import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
 
 public class IntakeSetRunning extends Action {
 
@@ -12,19 +12,19 @@ public class IntakeSetRunning extends Action {
     }
 
     @Override
-    public void _start(AutoRobot context) {
+    public void _start(AutonomousOpMode context) {
         if(run) context.intake.work();
         else context.intake.stop();
     }
 
     @Override
-    public void _tick(AutoRobot state) { }
+    public void _tick(AutonomousOpMode state) { }
 
     @Override
-    public boolean _hasFinished(AutoRobot state) {
+    public boolean _hasFinished(AutonomousOpMode state) {
         return true;
     }
 
     @Override
-    public void _end(AutoRobot state) { }
+    public void _end(AutonomousOpMode state) { }
 }

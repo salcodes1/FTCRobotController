@@ -7,22 +7,22 @@ public abstract class ActionGroup extends Action {
     }
 
     @Override
-    public void _start(AutoRobot context) {
+    public void _start(AutonomousOpMode context) {
         childActions[0].start(context);
     }
 
     @Override
-    public void _tick(AutoRobot context) {
+    public void _tick(AutonomousOpMode context) {
         childActions[0].tick(context);
     }
 
     @Override
-    public boolean _hasFinished(AutoRobot context) {
+    public boolean _hasFinished(AutonomousOpMode context) {
         return childActions[0].hasFinished(context);
     }
 
     @Override
-    public void _end(AutoRobot context) {
+    public void _end(AutonomousOpMode context) {
         childActions[0].end(context);
     }
 

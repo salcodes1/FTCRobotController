@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.bt.actions.controlflow;
 
 import org.firstinspires.ftc.teamcode.bt.Action;
-import org.firstinspires.ftc.teamcode.bt.AutoRobot;
+import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
 
 public class RunWhile extends Action {
 
     public interface Cond {
-        boolean call(AutoRobot state);
+        boolean call(AutonomousOpMode state);
     }
 
     Cond cond;
@@ -16,17 +16,17 @@ public class RunWhile extends Action {
     }
 
     @Override
-    public void _start(AutoRobot context) { }
+    public void _start(AutonomousOpMode context) { }
 
     @Override
-    public void _tick(AutoRobot context) { }
+    public void _tick(AutonomousOpMode context) { }
 
     @Override
-    public boolean _hasFinished(AutoRobot context) {
+    public boolean _hasFinished(AutonomousOpMode context) {
         return !cond.call(context);
     }
 
     @Override
-    public void _end(AutoRobot context) { }
+    public void _end(AutonomousOpMode context) { }
 
 }

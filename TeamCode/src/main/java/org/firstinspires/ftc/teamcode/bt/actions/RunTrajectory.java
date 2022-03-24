@@ -4,7 +4,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.firstinspires.ftc.teamcode.RR.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.bt.Action;
-import org.firstinspires.ftc.teamcode.bt.AutoRobot;
+import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
 
 public class RunTrajectory extends Action {
 
@@ -20,7 +20,7 @@ public class RunTrajectory extends Action {
     }
 
     @Override
-    public void _start(AutoRobot context) {
+    public void _start(AutonomousOpMode context) {
         if(context.drive.isBusy()) {
             throw new RuntimeException("RunTrajectory: You are giving a new trajectory " +
                     "when the current one isn't done!");
@@ -32,17 +32,17 @@ public class RunTrajectory extends Action {
     }
 
     @Override
-    public void _tick(AutoRobot state) {
+    public void _tick(AutonomousOpMode state) {
 
     }
 
     @Override
-    public boolean _hasFinished(AutoRobot state) {
+    public boolean _hasFinished(AutonomousOpMode state) {
         return !state.drive.isBusy();
     }
 
     @Override
-    public void _end(AutoRobot state) {
+    public void _end(AutonomousOpMode state) {
 
     }
 }

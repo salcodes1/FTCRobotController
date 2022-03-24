@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.bt.actions.controlflow;
 
 import org.firstinspires.ftc.teamcode.bt.Action;
-import org.firstinspires.ftc.teamcode.bt.AutoRobot;
+import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
 
 public class RunParallelRace extends Action {
 
@@ -12,7 +12,7 @@ public class RunParallelRace extends Action {
     }
 
     @Override
-    public void _start(AutoRobot context) {
+    public void _start(AutonomousOpMode context) {
         finished = false;
         for (Action action : childActions) {
             action.start(context);
@@ -20,7 +20,7 @@ public class RunParallelRace extends Action {
     }
 
     @Override
-    public void _tick(AutoRobot context) {
+    public void _tick(AutonomousOpMode context) {
         for (Action action : childActions) {
             if(action.hasFinished(context)) {
                 finished = true;
@@ -39,12 +39,12 @@ public class RunParallelRace extends Action {
     }
 
     @Override
-    public boolean _hasFinished(AutoRobot context) {
+    public boolean _hasFinished(AutonomousOpMode context) {
         return finished;
     }
 
     @Override
-    public void _end(AutoRobot context) {
+    public void _end(AutonomousOpMode context) {
         for (Action a : childActions) {
             a.end(context);
         }

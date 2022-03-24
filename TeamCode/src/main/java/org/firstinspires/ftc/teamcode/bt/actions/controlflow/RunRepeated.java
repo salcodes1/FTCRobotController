@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.bt.actions.controlflow;
 
 import org.firstinspires.ftc.teamcode.bt.Action;
-import org.firstinspires.ftc.teamcode.bt.AutoRobot;
+import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
 
 public class RunRepeated extends Action {
 
@@ -14,12 +14,12 @@ public class RunRepeated extends Action {
         this.times = times;
     }
     @Override
-    public void _start(AutoRobot context) {
+    public void _start(AutonomousOpMode context) {
         action.start(context);
     }
 
     @Override
-    public void _tick(AutoRobot context) {
+    public void _tick(AutonomousOpMode context) {
         action.tick(context);
         if(action.hasFinished(context)) {
             action.end(context);
@@ -29,12 +29,12 @@ public class RunRepeated extends Action {
     }
 
     @Override
-    public boolean _hasFinished(AutoRobot context) {
+    public boolean _hasFinished(AutonomousOpMode context) {
         return index >= times;
     }
 
     @Override
-    public void _end(AutoRobot context) {
+    public void _end(AutonomousOpMode context) {
         action.end(context);
     }
 }

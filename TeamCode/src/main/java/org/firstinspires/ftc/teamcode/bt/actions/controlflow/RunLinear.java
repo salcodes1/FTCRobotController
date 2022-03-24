@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.bt.actions.controlflow;
 
 import org.firstinspires.ftc.teamcode.bt.Action;
-import org.firstinspires.ftc.teamcode.bt.AutoRobot;
+import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
 
 public class RunLinear extends Action {
 
@@ -12,13 +12,13 @@ public class RunLinear extends Action {
     }
 
     @Override
-    public void _start(AutoRobot context) {
+    public void _start(AutonomousOpMode context) {
         actionIndex = 0;
         childActions[actionIndex].start(context);
     }
 
     @Override
-    public void _tick(AutoRobot context) {
+    public void _tick(AutonomousOpMode context) {
         if(childActions[actionIndex].hasFinished(context)) {
             childActions[actionIndex].end(context);
             actionIndex++;
@@ -29,12 +29,12 @@ public class RunLinear extends Action {
     }
 
     @Override
-    public boolean _hasFinished(AutoRobot context) {
+    public boolean _hasFinished(AutonomousOpMode context) {
         return actionIndex >= childActions.length;
     }
 
     @Override
-    public void _end(AutoRobot context) {
+    public void _end(AutonomousOpMode context) {
         // when finishing forcibly (e.g. RunParallelRace)
         if(!_hasFinished(context))
             childActions[actionIndex].end(context);
