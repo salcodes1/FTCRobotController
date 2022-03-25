@@ -54,10 +54,10 @@ public class TeleOpV3 extends OpMode {
 		drive = new Mecanum(this);
 		outtake = new OuttakeMechanism(this);
 
-		intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
-		intermediaryMotor = hardwareMap.get(DcMotor.class, "intermediaryMotor");
-		carouselMotor = hardwareMap.get(DcMotor.class, "carouselMotor");
-		capServo = hardwareMap.get(Servo.class, "capServo");
+		intakeMotor = hardwareMap.get(DcMotor.class, "motorIntake");
+		intermediaryMotor = hardwareMap.get(DcMotor.class, "motorIntermediar");
+		carouselMotor = hardwareMap.get(DcMotor.class, "motorCarousel");
+//		capServo = hardwareMap.get(Servo.class, "capServo");
 	}
 	@Override
 	public void loop() {

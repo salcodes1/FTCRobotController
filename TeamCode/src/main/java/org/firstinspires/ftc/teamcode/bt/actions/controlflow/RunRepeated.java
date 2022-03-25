@@ -5,26 +5,25 @@ import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
 
 public class RunRepeated extends Action {
 
-    private Action action;
     private int times;
     int index;
 
     public RunRepeated(int times, Action action) {
-        this.action = action;
+        this.childActions = new Action[]{action};
         this.times = times;
     }
     @Override
     public void _start(AutonomousOpMode context) {
-        action.start(context);
+        childActions[0].start(context);
     }
 
     @Override
     public void _tick(AutonomousOpMode context) {
-        action.tick(context);
-        if(action.hasFinished(context)) {
-            action.end(context);
+        childActions[0].tick(context);
+        if(childActions[0].hasFinished(context)) {
+            childActions[0].end(context);
             index++;
-            action.start(context);
+            childActions[0].start(context);
         }
     }
 
@@ -35,6 +34,6 @@ public class RunRepeated extends Action {
 
     @Override
     public void _end(AutonomousOpMode context) {
-        action.end(context);
+        childActions[0].end(context);
     }
 }

@@ -30,5 +30,11 @@ public class RunDelay extends Action {
     @Override
     public void _end(AutonomousOpMode context) {
 
+
+    }
+
+    @Override
+    public String getCustomDisplay() {
+       return String.valueOf(Math.max(0, targetTimeMs - System.currentTimeMillis()));
     }
 }

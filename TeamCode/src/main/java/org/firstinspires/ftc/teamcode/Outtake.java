@@ -45,9 +45,9 @@ public class Outtake {
 	Level currentLevel;
 
 	int LOADING_TICKS = 0;
-	int LOW_TICKS = -150;
+	int LOW_TICKS = -100;
 	int MID_TICKS = 500;
-	int HIGH_TICKS = 1200;
+	int HIGH_TICKS = 1400;
 
 	public static double SERVO_ARMED = 0.4;
 	public static double SERVO_DROP_LOW = 0.05;
@@ -58,8 +58,8 @@ public class Outtake {
 	{
 		actionQueue = new ArrayList<>();
 
-		motor = opMode.hardwareMap.get(DcMotor.class, "elevationMotor");
-		servo = opMode.hardwareMap.get(Servo.class, "containerServo");
+		motor = opMode.hardwareMap.get(DcMotor.class, "motorOuttake");
+		servo = opMode.hardwareMap.get(Servo.class, "servoOuttake");
 
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 

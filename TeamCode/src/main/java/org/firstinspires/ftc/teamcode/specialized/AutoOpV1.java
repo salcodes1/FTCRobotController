@@ -163,10 +163,10 @@ public class AutoOpV1 extends LinearOpMode {
         drive = new SampleMecanumDrive(hardwareMap);
         intakeMechanism = new IntakeMechanism(this);
         outtakeMechanism = new OuttakeMechanism(this);
-        carouselMotor = hardwareMap.get(DcMotor.class, "carouselMotor");
+        carouselMotor = hardwareMap.get(DcMotor.class, "motorCarousel");
         carouselMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        containerServo = hardwareMap.get(Servo.class, "containerServo");
+        containerServo = hardwareMap.get(Servo.class, "servoOuttake");
 
 
         PoseStorage.poseEstimate = new Pose2d(-36.00, -63.34, Math.toRadians(90));

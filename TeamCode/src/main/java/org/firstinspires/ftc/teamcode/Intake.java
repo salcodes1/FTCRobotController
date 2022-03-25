@@ -52,10 +52,10 @@ public class Intake {
 
 		actionQueue = new ArrayList<>();
 
-		intakeMotor = opMode.hardwareMap.get(DcMotor.class, "intakeMotor");
+		intakeMotor = opMode.hardwareMap.get(DcMotor.class, "motorIntake");
 		intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-		intermediaryMotor = opMode.hardwareMap.get(DcMotor.class, "intermediaryMotor");
+		intermediaryMotor = opMode.hardwareMap.get(DcMotor.class, "motorIntermediar");
 
 	}
 

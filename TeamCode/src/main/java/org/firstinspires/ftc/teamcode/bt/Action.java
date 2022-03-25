@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.bt;
 
 import java.util.HashMap;
 
-public abstract class Action {
+public abstract class Action implements Cloneable {
 
     protected Action[] childActions;
 
@@ -65,4 +65,13 @@ public abstract class Action {
     }
 
     public boolean DEBUG_showChildren() { return true; }
+    
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    public String getCustomDisplay() {
+        return "";
+    }
+
 }

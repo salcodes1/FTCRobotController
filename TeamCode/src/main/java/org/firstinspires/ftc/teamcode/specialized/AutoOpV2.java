@@ -208,7 +208,7 @@ public class AutoOpV2 extends LinearOpMode {
 		intakeMechanism = new Intake(this);
 		outtakeMechanism = new Outtake(this);
 
-		carouselMotor = hardwareMap.get(DcMotor.class, "carouselMotor");
+		carouselMotor = hardwareMap.get(DcMotor.class, "motorCarousel");
 		carouselMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 		PoseStorage.poseEstimate = new Pose2d(-36.00, -63.34, Math.toRadians(90));

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.bt;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -27,24 +28,27 @@ public abstract class AutonomousOpMode extends LinearOpMode {
     public Servo containerServo;
 
 
-    public AutonomousOpMode() {
+    @Override
+    public void runOpMode() throws InterruptedException {
         drive = new SampleMecanumDrive(hardwareMap);
 
-        carouselMotor = hardwareMap.get(DcMotor.class, "carouselMotor");
+        carouselMotor = hardwareMap.get(DcMotor.class, "motorCarousel");
         carouselMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         outtake = new Outtake(this);
         intake = new Intake(this);
 
-        containerServo = hardwareMap.get(Servo.class, "containerServo");
-    }
+        containerServo = hardwareMap.get(Servo.class, "servoOuttake");
 
-    @Override
-    public void runOpMode() throws InterruptedException {
+
+
+
+
+
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetry.setAutoClear(true);
 
-        telemetry.addLine("Precompiling trajectories");
+        telemetry.addLine("Precompiling trajectories;\n!DO NOT STOP THE PROCESS!");
         telemetry.update();
         precompileTrajectories();
 
@@ -81,7 +85,14 @@ public abstract class AutonomousOpMode extends LinearOpMode {
         SimpleTreeNode root = Utils.GetTreeFromAction(rootAction);
         new ListingTreePrinter().print(root, w);
 
-        telemetry.addLine(w.toString());
+        TelemetryPacket packet = new TelemetryPacket();
+        String[] lines = w.toString().split("\n");
+
+        for(String line : lines) {
+            packet.addLine(line);
+        }
+
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 
     void updateRobotState() {
@@ -100,8 +111,11 @@ public abstract class AutonomousOpMode extends LinearOpMode {
 class Utils {
     static SimpleTreeNode GetTreeFromAction(Action action) {
 
+        String display = action.getCustomDisplay().isEmpty()?
+            action.getState().name() : action.getCustomDisplay();
+
         SimpleTreeNode node = new SimpleTreeNode(
-            action.getClass().getSimpleName() + "(" + action.getState().name() + ")"
+            action.getClass().getSimpleName() + "[" + display + "]"
         );
         if(action.getChildActions() != null)
             for(Action a : action.getChildActions()) {

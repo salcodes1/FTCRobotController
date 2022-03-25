@@ -27,7 +27,7 @@ public class RunInline extends Action {
 
     @Override
     public boolean _hasFinished(AutonomousOpMode context) {
-        return false;
+        return true;
     }
 
     @Override

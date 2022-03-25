@@ -40,8 +40,8 @@ public class OuttakeMechanism {
     public OuttakeMechanism(OpMode opMode) {
         this.opMode = opMode;
 
-        elevationMotor = opMode.hardwareMap.get(DcMotor.class, "elevationMotor");
-        containerServo = opMode.hardwareMap.get(Servo.class, "containerServo");
+        elevationMotor = opMode.hardwareMap.get(DcMotor.class, "motorOuttake");
+        containerServo = opMode.hardwareMap.get(Servo.class, "servoOuttake");
 
         elevationMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 

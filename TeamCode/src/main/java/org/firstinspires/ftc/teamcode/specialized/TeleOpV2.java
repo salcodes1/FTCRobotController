@@ -4,80 +4,87 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.GamepadEx;
 import org.firstinspires.ftc.teamcode.Mecanum;
 import org.firstinspires.ftc.teamcode.Outtake;
-import org.firstinspires.ftc.teamcode.mechanisms.OuttakeMechanism;
 
 @TeleOp()
 public class TeleOpV2 extends OpMode {
 
-	// Gamepad 1
-	// left stick, triggers - movement
-	// Gamepad 2
-	// A - toggle intake
-	// B - reverse intake while pressed
-	// left bumper - toggle carousel
-	// dpad (down, left/right, up) - set outtake level (down, mid, up)
-	// X - outtake discard freight and reset
-	// Y - outtake reset to loading position !!NOT IMPLEMENTED
+    // Gamepad 1
+    // left stick, triggers - movement
+    // Gamepad 2
+    // A - toggle intake
+    // B - reverse intake while pressed
+    // left bumper - toggle carousel
+    // dpad (down, left/right, up) - set outtake level (down, mid, up)
+    // X - outtake discard freight and reset
+    // Y - outtake reset to loading position !!NOT IMPLEMENTED
 
-	GamepadEx g1, g2;
-	Mecanum drive;
+    GamepadEx g1, g2;
+    Mecanum drive;
 
-	DcMotor intakeMotor;
-	DcMotor intermediaryMotor;
-	boolean intakeState = false;
+    DcMotor intakeMotor;
+    DcMotor intermediaryMotor;
+    boolean intakeState = false;
 
-	DcMotor carouselMotor;
-	boolean carouselState = false;
+    DcMotor carouselMotor;
+    boolean carouselState = false;
 
-	CRServo capServo;
+    CRServo capServo;
 
-	Outtake outtake;
+    Outtake outtake;
 
-	@Override
-	public void init() {
-		g1 = new GamepadEx(gamepad1);
-		g2 = new GamepadEx(gamepad2);
-		drive = new Mecanum(this);
-		outtake = new Outtake(this);
+    @Override
+    public void init() {
+        g1 = new GamepadEx(gamepad1);
+        g2 = new GamepadEx(gamepad2);
+        drive = new Mecanum(this);
+        outtake = new Outtake(this);
 
-		intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
-		capServo = hardwareMap.get(CRServo.class, "capServo");
-		intermediaryMotor = hardwareMap.get(DcMotor.class, "intermediaryMotor");
-		carouselMotor = hardwareMap.get(DcMotor.class, "carouselMotor");
-	}
+        intakeMotor = hardwareMap.get(DcMotor.class, "motorIntake");
+//		capServo = hardwareMap.get(CRServo.class, "capServo");
+        intermediaryMotor = hardwareMap.get(DcMotor.class, "motorIntermediar");
+        carouselMotor = hardwareMap.get(DcMotor.class, "motorCarousel");
+    }
 
-	@Override
-	public void loop() {
+    @Override
+    public void loop() {
 
-	g1.update();
-	g2.update();
-	outtake.update();
+        g1.update();
+        g2.update();
+        outtake.update();
 
 
-	drive.vectorMove(-gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_trigger - gamepad1.right_trigger, 0.6);
+        drive.vectorMove(-gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_trigger - gamepad1.right_trigger, 0.6);
 
-	if(g2.getButtonDown("bumper_left")) carouselState = !carouselState;
-	if(g2.getButtonDown("a")) intakeState = !intakeState;
+        if (g2.getButtonDown("bumper_left")) carouselState = !carouselState;
+        if (g2.getButtonDown("a")) intakeState = !intakeState;
 
-	telemetry.update();
+        telemetry.update();
 
-	carouselMotor.setPower(carouselState ? -0.27 : 0.0);
-	intakeMotor.setPower(g2.getButton("b") ? 1.0 : intakeState ? -1.0 : 0.0);
-	intermediaryMotor.setPower(g2.getButton("b") ? 1.0 : intakeState ? -1.0 : 0.0);
+        carouselMotor.setPower(carouselState ? -0.27 : 0.0);
+        intakeMotor.setPower(g2.getButton("b") ? 1.0 : intakeState ? -1.0 : 0.0);
+        intermediaryMotor.setPower(g2.getButton("b") ? 1.0 : intakeState ? -1.0 : 0.0);
 
-	if(gamepad2.left_trigger > 0) capServo.setPower(gamepad2.left_trigger * 0.4);
-	else if(gamepad2.right_trigger > 0) capServo.setPower(gamepad2.right_trigger * -0.4);
-	else capServo.setPower(0);
+//	if(gamepad2.left_trigger > 0) capServo.setPower(gamepad2.left_trigger * 0.4);
+//	else if(gamepad2.right_trigger > 0) capServo.setPower(gamepad2.right_trigger * -0.4);
+//	else capServo.setPower(0);
 
-	if(g2.getButtonDown("dpad_down")) 									outtake.setLevel(Outtake.Level.low);
-	if(g2.getButtonDown("dpad_left") || g2.getButtonDown("dpad_right")) outtake.setLevel(Outtake.Level.mid);
-	if(g2.getButtonDown("dpad_up")) 									outtake.setLevel(Outtake.Level.high);
-	if(g2.getButtonDown("x")) 											outtake.drop();
+        if (g2.getButtonDown("dpad_down")) outtake.setLevel(Outtake.Level.low);
+        if (g2.getButtonDown("dpad_left") || g2.getButtonDown("dpad_right"))
+            outtake.setLevel(Outtake.Level.mid);
+        if (g2.getButtonDown("dpad_up")) outtake.setLevel(Outtake.Level.high);
+        if (g2.getButtonDown("x")) outtake.drop();
 
+        DcMotor 		outtakeMotor = hardwareMap.get(DcMotor.class, "motorOuttake");
+        DcMotor 		carouselMotor = hardwareMap.get(DcMotor.class, "motorCarousel");
+        DcMotor 		intakeMotor = hardwareMap.get(DcMotor.class, "motorIntake");
+        DcMotor 		intermediarMotor = hardwareMap.get(DcMotor.class, "motorIntermediar");
+        telemetry.addData("outtakePos", outtakeMotor.getCurrentPosition());
+        telemetry.addData("carouselPos", carouselMotor.getCurrentPosition());
+        telemetry.addData("intakePos", intakeMotor.getCurrentPosition());
+        telemetry.addData("intermediarPos", intermediarMotor.getCurrentPosition());
 	}
 }

@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.bt;
 public abstract class ActionGroup extends Action {
 
     public ActionGroup() {
-        childActions = new Action[]{constructAction()};
+        childActions = new Action[]{constructGroup()};
     }
 
     @Override
@@ -26,7 +26,7 @@ public abstract class ActionGroup extends Action {
         childActions[0].end(context);
     }
 
-    protected abstract Action constructAction();
+    protected abstract Action constructGroup();
 
     @Override
     public boolean DEBUG_showChildren() {

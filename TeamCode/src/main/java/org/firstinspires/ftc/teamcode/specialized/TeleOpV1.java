@@ -44,7 +44,7 @@ public class TeleOpV1 extends OpMode {
         state = new AtomicReference<>(WorkState.SELECT_LEVEL_AND_CONFIRM);
         intakeMechanism = new IntakeMechanism(this);
         outtakeMechanism = new OuttakeMechanism(this);
-        carouselMotor = hardwareMap.get(DcMotor.class, "carouselMotor");
+        carouselMotor = hardwareMap.get(DcMotor.class, "motorCarousel");
         capServo = hardwareMap.get(Servo.class, "capServo");
 
         headingController.setInputBounds(-Math.PI, Math.PI);
