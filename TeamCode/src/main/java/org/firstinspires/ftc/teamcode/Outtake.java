@@ -49,10 +49,10 @@ public class Outtake {
 	int MID_TICKS = 500;
 	int HIGH_TICKS = 1400;
 
-	public static double SERVO_ARMED = 0.4;
-	public static double SERVO_DROP_LOW = 0.05;
-	public static double SERVO_DROP_NORMAL = 0.05;
-	public static double SERVO_LOADING = 0.61;
+	public static double SERVO_ARMED = 0.8;
+	public static double SERVO_DROP_LOW = 0.4;
+	public static double SERVO_DROP_NORMAL = 0.4;
+	public static double SERVO_LOADING = 1.0;
 
 	public Outtake(OpMode opMode)
 	{

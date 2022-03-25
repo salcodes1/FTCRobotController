@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.RR.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.statics.PoseStorage;
 
 import java.io.StringWriter;
+import java.util.HashMap;
 
 import hu.webarticum.treeprinter.ListingTreePrinter;
 import hu.webarticum.treeprinter.SimpleTreeNode;
@@ -111,11 +112,13 @@ public abstract class AutonomousOpMode extends LinearOpMode {
 class Utils {
     static SimpleTreeNode GetTreeFromAction(Action action) {
 
+        String[] Coresp = new String[] { "○", "◔", "◕", "●" };
+
         String display = action.getCustomDisplay().isEmpty()?
-            action.getState().name() : action.getCustomDisplay();
+            Coresp[action.getState().ordinal()] : action.getCustomDisplay();
 
         SimpleTreeNode node = new SimpleTreeNode(
-            action.getClass().getSimpleName() + "[" + display + "]"
+            action.getClass().getSimpleName() + " [" + display + "]"
         );
         if(action.getChildActions() != null)
             for(Action a : action.getChildActions()) {

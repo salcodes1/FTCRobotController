@@ -26,7 +26,7 @@ public class RunTrajectory extends Action {
                     "when the current one isn't done!");
         }
         if(trajectory != null)
-            context.drive.followTrajectory(trajectory);
+            context.drive.followTrajectoryAsync(trajectory);
         else
             context.drive.followTrajectorySequenceAsync(trajectorySequence);
     }
