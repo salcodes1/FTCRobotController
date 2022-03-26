@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -44,6 +45,11 @@ public class Intake {
 
 	OpMode opMode;
 
+
+	public Servo servoIntake;
+	public DigitalChannel touchSensor;
+
+
 	boolean isCurrentlyWorking = false;
 
 	public Intake(OpMode opMode) {
@@ -56,6 +62,12 @@ public class Intake {
 		intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 		intermediaryMotor = opMode.hardwareMap.get(DcMotor.class, "motorIntermediar");
+
+		servoIntake = opMode.hardwareMap.get(Servo.class, "servoIntake");
+		touchSensor = opMode.hardwareMap.get(DigitalChannel.class, "touchSensor");
+
+		servoIntake.setPosition(0);
+		touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
 	}
 

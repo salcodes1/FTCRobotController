@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.GamepadEx;
 import org.firstinspires.ftc.teamcode.Mecanum;
@@ -33,6 +35,11 @@ public class TeleOpV2 extends OpMode {
     boolean carouselState = false;
 
     CRServo capServo;
+    Servo servoIntake;
+    boolean servoIntakeState = false;
+
+    DigitalChannel touchSensor;
+    boolean touchSensorState = false;
 
     Outtake outtake;
 
@@ -47,6 +54,11 @@ public class TeleOpV2 extends OpMode {
 //		capServo = hardwareMap.get(CRServo.class, "capServo");
         intermediaryMotor = hardwareMap.get(DcMotor.class, "motorIntermediar");
         carouselMotor = hardwareMap.get(DcMotor.class, "motorCarousel");
+        servoIntake = hardwareMap.get(Servo.class, "servoIntake");
+        touchSensor = hardwareMap.get(DigitalChannel.class, "touchSensor");
+
+        servoIntake.setPosition(0);
+        touchSensor.setMode(DigitalChannel.Mode.INPUT);
     }
 
     @Override
@@ -57,7 +69,7 @@ public class TeleOpV2 extends OpMode {
         outtake.update();
 
 
-        drive.vectorMove(-gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_trigger - gamepad1.right_trigger, 0.6);
+        drive.vectorMove(-gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_trigger - gamepad1.right_trigger, 0.75);
 
         if (g2.getButtonDown("bumper_left")) carouselState = !carouselState;
         if (g2.getButtonDown("a")) intakeState = !intakeState;
@@ -78,13 +90,16 @@ public class TeleOpV2 extends OpMode {
         if (g2.getButtonDown("dpad_up")) outtake.setLevel(Outtake.Level.high);
         if (g2.getButtonDown("x")) outtake.drop();
 
-        DcMotor 		outtakeMotor = hardwareMap.get(DcMotor.class, "motorOuttake");
-        DcMotor 		carouselMotor = hardwareMap.get(DcMotor.class, "motorCarousel");
-        DcMotor 		intakeMotor = hardwareMap.get(DcMotor.class, "motorIntake");
-        DcMotor 		intermediarMotor = hardwareMap.get(DcMotor.class, "motorIntermediar");
-        telemetry.addData("outtakePos", outtakeMotor.getCurrentPosition());
-        telemetry.addData("carouselPos", carouselMotor.getCurrentPosition());
-        telemetry.addData("intakePos", intakeMotor.getCurrentPosition());
-        telemetry.addData("intermediarPos", intermediarMotor.getCurrentPosition());
+        if(g1.getButtonDown("b"))
+            servoIntake.setPosition((servoIntakeState = !servoIntakeState)? 1 : 0);
+
+        if(touchSensor.getState() && !touchSensorState) {
+            touchSensorState = true;
+            servoIntakeState = false;
+            servoIntake.setPosition(0);
+        } else if(!touchSensor.getState()) {
+            touchSensorState = false;
+        }
+
 	}
 }

@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunParallelRace;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunParallelWait;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunRepeated;
 import org.firstinspires.ftc.teamcode.bt.actions.intake.IntakeSetRunning;
+import org.firstinspires.ftc.teamcode.bt.actions.intake.IntakeWaitForElement;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeDropFreight;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeSetLevel;
 import org.firstinspires.ftc.teamcode.statics.PoseStorage;
@@ -163,7 +164,7 @@ public class AutoOpV3 extends AutonomousOpMode {
         Action autoRoutine = new RunLinear(
             new RunParallelWait(
                 new RunTrajectory(start_to_carousel),
-                new RunCarousel(-2025, -0.25)
+                new RunCarousel(-2125, -0.25)
             ),
             new RunParallelWait(
                 new RunTrajectory(carousel_to_hub),
@@ -175,7 +176,7 @@ public class AutoOpV3 extends AutonomousOpMode {
                 new IntakeSetRunning(true),
                 new RunTrajectory(hub_to_warehouse_c1)
             ),
-            new RunDelay(1000),
+            new IntakeWaitForElement(),
             new RunParallelWait(
                 new IntakeSetRunning(false),
                 new RunTrajectory(warehouse_to_hub_c1),
@@ -187,7 +188,7 @@ public class AutoOpV3 extends AutonomousOpMode {
                 new IntakeSetRunning(true),
                 new RunTrajectory(hub_to_warehouse_c1)
             ),
-            new RunDelay(1000),
+            new IntakeWaitForElement(),
             new RunParallelWait(
                 new IntakeSetRunning(false),
                 new RunTrajectory(warehouse_to_hub_c2),
@@ -199,14 +200,13 @@ public class AutoOpV3 extends AutonomousOpMode {
                 new RunTrajectory(hub_to_duck),
                 new OuttakeSetLevel(Outtake.Level.loading)
             ),
-            new RunDelay(500),
-            new OuttakeSetLevel(Outtake.Level.high),
             new RunParallelWait(
                 new RunTrajectory(duck_to_hub),
-                new RunParallelWait(
-                    new RunDelay(500) // sa mearga minim 500ms
-                ),
-                new IntakeSetRunning(false)
+                new RunLinear(
+                    new RunDelay(500),
+                    new IntakeSetRunning(false),
+                    new OuttakeSetLevel(Outtake.Level.high)
+                )
             )
 
 
