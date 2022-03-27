@@ -40,8 +40,8 @@ public class Intake {
 	ArrayList<runAfter> actionQueue;
 
 
-	DcMotor intakeMotor;
-	DcMotor intermediaryMotor;
+	public DcMotor intakeMotor;
+	public DcMotor intermediaryMotor;
 
 	OpMode opMode;
 

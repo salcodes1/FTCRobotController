@@ -13,8 +13,8 @@ public class IntakeSetRunning extends Action {
 
     @Override
     public void _start(AutonomousOpMode context) {
-        if(run) context.intake.work();
-        else context.intake.stop();
+        if(run) context.intake.intakeMotor.setPower(1);
+        else context.intake.intakeMotor.setPower(0);
     }
 
     @Override

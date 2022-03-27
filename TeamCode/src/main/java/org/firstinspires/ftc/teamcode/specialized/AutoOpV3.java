@@ -20,10 +20,12 @@ import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunLinear;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunParallelRace;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunParallelWait;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunRepeated;
+import org.firstinspires.ftc.teamcode.bt.actions.intake.IntakeSetExtender;
 import org.firstinspires.ftc.teamcode.bt.actions.intake.IntakeSetRunning;
 import org.firstinspires.ftc.teamcode.bt.actions.intake.IntakeWaitForElement;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeDropFreight;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeSetLevel;
+import org.firstinspires.ftc.teamcode.bt.actions.sequences.DoCycle;
 import org.firstinspires.ftc.teamcode.statics.PoseStorage;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -144,23 +146,6 @@ public class AutoOpV3 extends AutonomousOpMode {
     @Override
     protected Action getRoutine() {
 
-        Func<Action> DoCycle = () -> new RunLinear(
-            new RunParallelWait(
-                new OuttakeSetLevel(Outtake.Level.loading),
-                new IntakeSetRunning(true),
-                new RunTrajectory(hub_to_warehouse_c1)
-            ),
-            new RunDelay(1000),
-            new RunParallelWait(
-                new RunTrajectory(warehouse_to_hub_c1),
-                new OuttakeSetLevel(Outtake.Level.high)
-            ),
-            new RunParallelWait(
-                new OuttakeDropFreight(),
-                new RunDelay(400)
-            )
-        );
-
         Action autoRoutine = new RunLinear(
             new RunParallelWait(
                 new RunTrajectory(start_to_carousel),
@@ -171,45 +156,38 @@ public class AutoOpV3 extends AutonomousOpMode {
                 new OuttakeSetLevel(preloadLevel)
             ),
             new OuttakeDropFreight(),
+            new DoCycle(hub_to_warehouse_c1, warehouse_to_hub_c1),
+            new DoCycle(hub_to_warehouse_c1, warehouse_to_hub_c2),
             new RunParallelWait(
-                new OuttakeSetLevel(Outtake.Level.loading),
-                new IntakeSetRunning(true),
-                new RunTrajectory(hub_to_warehouse_c1)
-            ),
-            new IntakeWaitForElement(),
-            new RunParallelWait(
-                new IntakeSetRunning(false),
-                new RunTrajectory(warehouse_to_hub_c1),
-                new OuttakeSetLevel(Outtake.Level.high)
-            ),
-            new OuttakeDropFreight(),
-            new RunParallelWait(
-                new OuttakeSetLevel(Outtake.Level.loading),
-                new IntakeSetRunning(true),
-                new RunTrajectory(hub_to_warehouse_c1)
-            ),
-            new IntakeWaitForElement(),
-            new RunParallelWait(
-                new IntakeSetRunning(false),
-                new RunTrajectory(warehouse_to_hub_c2),
-                new OuttakeSetLevel(Outtake.Level.high)
-            ),
-            new OuttakeDropFreight(),
-            new RunParallelWait(
-                new IntakeSetRunning(true),
                 new RunTrajectory(hub_to_duck),
-                new OuttakeSetLevel(Outtake.Level.loading)
+                new OuttakeSetLevel(Outtake.Level.loading),
+                new IntakeSetRunning(true)
             ),
             new RunParallelWait(
                 new RunTrajectory(duck_to_hub),
                 new RunLinear(
-                    new RunDelay(500),
+                    new RunDelay(800),
                     new IntakeSetRunning(false),
                     new OuttakeSetLevel(Outtake.Level.high)
                 )
+            ),
+            new OuttakeDropFreight(),
+            new RunTrajectory(hub_to_park)
+        );
+
+        Action test = new RunLinear(
+            new IntakeSetRunning(false),
+            new IntakeWaitForElement(),
+            new RunDelay(300),
+            new IntakeSetRunning(false),
+            new OuttakeSetLevel(Outtake.Level.high),
+            new RunParallelWait(
+                new OuttakeDropFreight(),
+                new RunLinear(
+                    new RunDelay(200),
+                    new OuttakeSetLevel(Outtake.Level.loading)
+                )
             )
-
-
         );
 
         return autoRoutine;
