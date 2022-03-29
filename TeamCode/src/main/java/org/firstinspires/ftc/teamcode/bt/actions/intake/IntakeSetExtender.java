@@ -13,7 +13,7 @@ public class IntakeSetExtender extends Action {
     }
     @Override
     protected void _start(AutonomousOpMode context) {
-        context.intake.servoIntake.setPosition(state? 1 : 0);
+        context.intake.servoIntake.setPosition(state? 0.25 : 0);
     }
 
     @Override

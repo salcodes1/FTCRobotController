@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.GamepadEx;
 import org.firstinspires.ftc.teamcode.Mecanum;
 import org.firstinspires.ftc.teamcode.Outtake;
 
-@TeleOp(name = "TeleOp Red", group = "0")
-public class TeleOpV2 extends OpMode {
+@TeleOp(name = "TeleOp Blue", group = "0")
+public class TeleOpV2_Blue extends OpMode {
 
     // Gamepad 1
     // left stick, triggers - movement
@@ -76,7 +76,7 @@ public class TeleOpV2 extends OpMode {
 
         telemetry.update();
 
-        carouselMotor.setPower(carouselState ? -0.33 : 0.0);
+        carouselMotor.setPower(carouselState ? 0.33 : 0.0);
         intakeMotor.setPower(g2.getButton("b") ? 1.0 : intakeState ? -1.0 : 0.0);
         intermediaryMotor.setPower(g2.getButton("b") ? 1.0 : intakeState ? -1.0 : 0.0);
 
@@ -90,7 +90,7 @@ public class TeleOpV2 extends OpMode {
         if (g2.getButtonDown("dpad_up")) outtake.setLevel(Outtake.Level.high);
         if (g2.getButtonDown("x")) outtake.drop();
 
-//        if(g1.getButtonDown("b"))
+        if(g1.getButtonDown("b"))
 //            servoIntake.setPosition((servoIntakeState = !servoIntakeState)? 1 : 0);
 
         if(touchSensor.getState() && !touchSensorState) {

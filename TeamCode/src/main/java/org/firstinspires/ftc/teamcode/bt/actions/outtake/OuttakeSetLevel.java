@@ -27,7 +27,6 @@ public class OuttakeSetLevel extends Action {
 
         @Override
         public void _end(AutonomousOpMode state) {
-//            state.outtake.motor.setPower(0);
         }
     }
 

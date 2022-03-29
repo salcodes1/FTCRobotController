@@ -19,6 +19,7 @@ public class CapstoneDetectPipeline extends OpenCvPipeline {
         int third = input.cols() / 3;
 
         Range wholeHeight = new Range(0, input.rows() - 1);
+
         Range segment1Range = new Range(0, third - 1);
         Range segment2Range = new Range(third, 2 * third - 1);
         Range segment3Range = new Range(2 * third, 3 * third - 1);

@@ -46,7 +46,7 @@ public class Outtake {
 
 	int LOADING_TICKS = 0;
 	int LOW_TICKS = -100;
-	int MID_TICKS = 500;
+	int MID_TICKS = 550;
 	int HIGH_TICKS = 1400;
 
 	public static double SERVO_ARMED = 0.8;

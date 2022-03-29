@@ -12,7 +12,7 @@ public class IntermediarySetRunning extends Action {
     }
     @Override
     protected void _start(AutonomousOpMode context) {
-        context.intake.intermediaryMotor.setPower(run? 1 : 0);
+        context.intake.intermediaryMotor.setPower(run? -1 : 0);
     }
 
     @Override

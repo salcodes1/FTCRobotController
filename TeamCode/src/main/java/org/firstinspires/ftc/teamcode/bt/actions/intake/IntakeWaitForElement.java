@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
 public class IntakeWaitForElement extends Action {
     @Override
     protected void _start(AutonomousOpMode context) {
-        context.intake.servoIntake.setPosition(1);
+//        context.intake.servoIntake.setPosition(1);
     }
 
     @Override

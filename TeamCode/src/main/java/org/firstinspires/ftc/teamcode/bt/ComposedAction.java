@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.bt;
 
-public abstract class ActionGroup extends Action {
+public abstract class ComposedAction extends Action {
 
-    public ActionGroup() {
+    public ComposedAction() {
         childActions = new Action[]{constructGroup()};
     }
 
@@ -30,6 +30,6 @@ public abstract class ActionGroup extends Action {
 
     @Override
     public boolean DEBUG_showChildren() {
-        return false;
+        return true;
     }
 }

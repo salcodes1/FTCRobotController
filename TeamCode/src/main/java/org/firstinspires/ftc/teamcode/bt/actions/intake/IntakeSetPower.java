@@ -3,18 +3,17 @@ package org.firstinspires.ftc.teamcode.bt.actions.intake;
 import org.firstinspires.ftc.teamcode.bt.Action;
 import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
 
-public class IntakeSetRunning extends Action {
+public class IntakeSetPower extends Action {
 
-    private boolean run;
+    private float run;
 
-    public IntakeSetRunning(boolean run) {
+    public IntakeSetPower(float run) {
         this.run = run;
     }
 
     @Override
     public void _start(AutonomousOpMode context) {
-        if(run) context.intake.intakeMotor.setPower(1);
-        else context.intake.intakeMotor.setPower(0);
+        context.intake.intakeMotor.setPower(run);
     }
 
     @Override
