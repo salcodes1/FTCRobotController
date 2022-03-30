@@ -47,6 +47,7 @@ abstract public class AutoOpV4Base extends AutonomousOpMode {
         return ((side == Side.RED)? "red_" : "blue_") + name;
     }
 
+
     @Override
     protected void initStart() {
 

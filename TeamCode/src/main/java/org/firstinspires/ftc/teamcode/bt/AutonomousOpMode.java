@@ -59,6 +59,9 @@ public abstract class AutonomousOpMode extends LinearOpMode {
 
         telemetry.addLine("Precompiling trajectories;\n!DO NOT STOP THE PROCESS!");
         telemetry.update();
+
+        setParams();
+
         precompileTrajectories();
 
         telemetry.addLine("Done precompiling");
@@ -114,6 +117,10 @@ public abstract class AutonomousOpMode extends LinearOpMode {
     protected abstract void initStart();
 
     protected abstract void initTick();
+
+    protected void setParams() {
+
+    }
 
     protected abstract Action getRoutine();
 }
