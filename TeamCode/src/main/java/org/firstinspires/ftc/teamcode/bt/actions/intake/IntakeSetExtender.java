@@ -5,15 +5,14 @@ import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
 
 public class IntakeSetExtender extends Action {
 
-    private boolean state;
+    public double pos = 0;
 
-    public IntakeSetExtender(boolean state) {
-
-        this.state = state;
+    public IntakeSetExtender(double pos) {
+        this.pos = pos;
     }
     @Override
     protected void _start(AutonomousOpMode context) {
-        context.intake.servoIntake.setPosition(state? 0.25 : 0);
+        context.intake.servoIntake.setPosition(pos);
     }
 
     @Override

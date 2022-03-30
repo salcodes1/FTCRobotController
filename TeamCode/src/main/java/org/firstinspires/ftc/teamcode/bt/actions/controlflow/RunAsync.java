@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
 
 public class RunAsync extends Action {
 
-    interface Exec {
+    public interface Exec {
         void call(AutonomousOpMode state);
     }
 

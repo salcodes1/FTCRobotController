@@ -14,8 +14,6 @@ import org.firstinspires.ftc.teamcode.Outtake;
 import org.firstinspires.ftc.teamcode.RR.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.statics.PoseStorage;
 import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.io.StringWriter;
 
@@ -92,7 +90,7 @@ public abstract class AutonomousOpMode extends LinearOpMode {
 
     private void printActionTree() {
         StringWriter w = new StringWriter();
-        SimpleTreeNode root = Utils.GetTreeFromAction(rootAction);
+        SimpleTreeNode root = Utils.GetTreeFromAction(rootAction, this);
         new ListingTreePrinter().print(root, w);
 
         TelemetryPacket packet = new TelemetryPacket();
@@ -121,19 +119,19 @@ public abstract class AutonomousOpMode extends LinearOpMode {
 }
 
 class Utils {
-    static SimpleTreeNode GetTreeFromAction(Action action) {
+    static SimpleTreeNode GetTreeFromAction(Action action, AutonomousOpMode context) {
 
         String[] Coresp = new String[] { "○", "◔", "◕", "●" };
 
-        String display = action.getCustomDisplay().isEmpty()?
-            Coresp[action.getState().ordinal()] : action.getCustomDisplay();
+        String display = action.getCustomDisplay(context).isEmpty()?
+            Coresp[action.getState().ordinal()] : action.getCustomDisplay(context);
 
         SimpleTreeNode node = new SimpleTreeNode(
             action.getClass().getSimpleName() + " [" + display + "]"
         );
         if(action.getChildActions() != null)
             for(Action a : action.getChildActions()) {
-                if(a.getState() != Action.State.DEFAULT && a.DEBUG_showChildren()) node.addChild(GetTreeFromAction(a));
+                if(a.getState() != Action.State.DEFAULT && a.DEBUG_showChildren()) node.addChild(GetTreeFromAction(a, context));
             }
         return node;
     }

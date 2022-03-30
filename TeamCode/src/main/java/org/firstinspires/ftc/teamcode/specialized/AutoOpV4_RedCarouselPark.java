@@ -13,13 +13,14 @@ import org.firstinspires.ftc.teamcode.bt.Action;
 import org.firstinspires.ftc.teamcode.bt.actions.RunCarousel;
 import org.firstinspires.ftc.teamcode.bt.actions.RunTrajectory;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunDelay;
+import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunInline;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunLinear;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunParallelWait;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeDropFreight;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeSetLevel;
 
-@Autonomous(name = "Red C Pre Car Park Grace", preselectTeleOp = "TeleOp Blue")
-public class AutoOpV4_1 extends AutoOpV4Base {
+@Autonomous(name = "Red Carousel Park")
+public class AutoOpV4_RedCarouselPark extends AutoOpV4Base {
 
     TrajectorySequence hub_to_carousel;
     Trajectory carousel_to_warehouse, carousel_to_park;
@@ -42,6 +43,7 @@ public class AutoOpV4_1 extends AutoOpV4Base {
     @Override
     protected Action getRoutine() {
         return new RunLinear(
+            new RunInline(ctx -> ctx.outtake.capServo.setPosition(0.65)),
             new RunParallelWait(
                 new RunLinear(
                     new RunDelay(600),

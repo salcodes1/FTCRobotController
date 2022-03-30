@@ -13,6 +13,7 @@ import java.util.ArrayList;
 @Config
 public class Outtake {
 
+	public final Servo capServo;
 	public DcMotor motor;
 	public Servo servo;
 
@@ -65,6 +66,10 @@ public class Outtake {
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 		servo.setPosition(SERVO_ARMED);
+
+		capServo = opMode.hardwareMap.get(Servo.class, "servoCapArm");
+		capServo.setPosition(0.9);
+
 	}
 
 	public void setLevel(Level level) {

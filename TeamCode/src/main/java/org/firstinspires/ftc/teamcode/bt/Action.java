@@ -125,7 +125,7 @@ public abstract class Action implements Cloneable {
         return super.clone();
     }
 
-    public String getCustomDisplay() {
+    public String getCustomDisplay(AutonomousOpMode context) {
         return "";
     }
 

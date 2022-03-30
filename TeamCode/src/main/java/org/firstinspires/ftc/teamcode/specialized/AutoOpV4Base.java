@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunDelay;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunLinear;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunParallelRace;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunParallelWait;
+import org.firstinspires.ftc.teamcode.bt.actions.intake.IntakeSetExtender;
 import org.firstinspires.ftc.teamcode.bt.actions.intake.IntakeSetPower;
 import org.firstinspires.ftc.teamcode.bt.actions.intake.IntakeWaitForElement;
 import org.firstinspires.ftc.teamcode.bt.actions.intake.IntermediarySetRunning;
@@ -131,15 +132,20 @@ abstract public class AutoOpV4Base extends AutonomousOpMode {
                     new RunTrajectory(h_to_w),
                     new IntakeSetPower(-1),
                     new IntermediarySetRunning(true),
-                    new RunParallelRace(
-                        new IntakeWaitForElement(),
-                        new RunDelay(3500)
+                    new IntakeSetExtender(0.5),
+                    new RunLinear(
+                        new RunParallelRace(
+                            new IntakeWaitForElement(),
+                            new RunDelay(5000)
+                        ),
+                        new IntakeSetPower(0),
+                        new IntakeSetExtender(0)
                     )
+
                 ),
                 new RunParallelWait(
                     new RunTrajectory(w_to_h),
                     new RunLinear(
-                        new IntakeSetPower(0),
                         new RunDelay(500),
                         new IntakeSetPower(-1),
                         new RunDelay(1300),
@@ -159,7 +165,7 @@ abstract public class AutoOpV4Base extends AutonomousOpMode {
         private Trajectory transitionTrajectory;
 
 
-        public DoNCycles(int noCycles, Vector2d[] wPoints, Vector2d[] hPoints) {
+        public  DoNCycles(int noCycles, Vector2d[] wPoints, Vector2d[] hPoints) {
             this.noCycles = noCycles;
             this.wPoints = wPoints;
             this.hPoints = hPoints;

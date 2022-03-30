@@ -34,7 +34,7 @@ public class TeleOpV2_Red extends OpMode {
     DcMotor carouselMotor;
     boolean carouselState = false;
 
-    CRServo capServo;
+    Servo capServo;
     Servo servoIntake;
     boolean servoIntakeState = false;
 
@@ -51,7 +51,7 @@ public class TeleOpV2_Red extends OpMode {
         outtake = new Outtake(this);
 
         intakeMotor = hardwareMap.get(DcMotor.class, "motorIntake");
-//		capServo = hardwareMap.get(CRServo.class, "capServo");
+		capServo = hardwareMap.get(Servo.class, "servoCapArm");
         intermediaryMotor = hardwareMap.get(DcMotor.class, "motorIntermediar");
         carouselMotor = hardwareMap.get(DcMotor.class, "motorCarousel");
         servoIntake = hardwareMap.get(Servo.class, "servoIntake");
@@ -59,6 +59,7 @@ public class TeleOpV2_Red extends OpMode {
 
         servoIntake.setPosition(0);
         touchSensor.setMode(DigitalChannel.Mode.INPUT);
+        capServo.setPosition(0.65);
     }
 
     @Override
@@ -80,7 +81,6 @@ public class TeleOpV2_Red extends OpMode {
         intakeMotor.setPower(g2.getButton("b") ? 1.0 : intakeState ? -1.0 : 0.0);
         intermediaryMotor.setPower(g2.getButton("b") ? 1.0 : intakeState ? -1.0 : 0.0);
 
-//	if(gamepad2.left_trigger > 0) capServo.setPower(gamepad2.left_trigger * 0.4);
 //	else if(gamepad2.right_trigger > 0) capServo.setPower(gamepad2.right_trigger * -0.4);
 //	else capServo.setPower(0);
 

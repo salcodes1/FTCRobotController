@@ -47,7 +47,7 @@ public class Intake {
 
 
 	public Servo servoIntake;
-	public DigitalChannel touchSensor;
+	public DigitalChannel[] touchSensors;
 
 
 	boolean isCurrentlyWorking = false;
@@ -64,10 +64,19 @@ public class Intake {
 		intermediaryMotor = opMode.hardwareMap.get(DcMotor.class, "motorIntermediar");
 
 		servoIntake = opMode.hardwareMap.get(Servo.class, "servoIntake");
-		touchSensor = opMode.hardwareMap.get(DigitalChannel.class, "touchSensor");
+
+		touchSensors = new DigitalChannel[]{
+			opMode.hardwareMap.get(DigitalChannel.class, "touchSensor1"),
+			opMode.hardwareMap.get(DigitalChannel.class, "touchSensor2"),
+			opMode.hardwareMap.get(DigitalChannel.class, "touchSensor3")
+
+		};
 
 		servoIntake.setPosition(0);
-		touchSensor.setMode(DigitalChannel.Mode.INPUT);
+
+		for(DigitalChannel sensor : touchSensors) {
+			sensor.setMode(DigitalChannel.Mode.INPUT);
+		}
 
 	}
 
