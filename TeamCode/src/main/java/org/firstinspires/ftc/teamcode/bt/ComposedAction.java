@@ -2,12 +2,10 @@ package org.firstinspires.ftc.teamcode.bt;
 
 public abstract class ComposedAction extends Action {
 
-    public ComposedAction() {
-        childActions = new Action[]{constructGroup()};
-    }
 
     @Override
     public void _start(AutonomousOpMode context) {
+        childActions = new Action[]{constructGroupAtStart(context)};
         childActions[0].start(context);
     }
 
@@ -26,7 +24,7 @@ public abstract class ComposedAction extends Action {
         childActions[0].end(context);
     }
 
-    protected abstract Action constructGroup();
+    protected abstract Action constructGroupAtStart(AutonomousOpMode context);
 
     @Override
     public boolean DEBUG_showChildren() {

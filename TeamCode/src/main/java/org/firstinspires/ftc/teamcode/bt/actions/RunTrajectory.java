@@ -8,10 +8,16 @@ import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
 
 public class RunTrajectory extends Action {
 
-    private final Trajectory trajectory;
+    private Trajectory trajectory;
+    private TrajectorySequence trajectorySequence;
 
     public RunTrajectory(Trajectory trajectory) {
         this.trajectory = trajectory;
+    }
+
+
+    public RunTrajectory(TrajectorySequence trajectorySequence) {
+        this.trajectorySequence = trajectorySequence;
     }
 
     @Override
@@ -21,7 +27,10 @@ public class RunTrajectory extends Action {
                     "when the current one isn't done!");
             // For debuggability purposes
         }
-        context.drive.followTrajectoryAsync(trajectory);
+        if(trajectory != null)
+            context.drive.followTrajectoryAsync(trajectory);
+        else
+            context.drive.followTrajectorySequenceAsync(trajectorySequence);
     }
 
     @Override

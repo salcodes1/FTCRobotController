@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.specialized;
+package org.firstinspires.ftc.teamcode.specialized.prev;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Mecanum;
 import org.firstinspires.ftc.teamcode.Outtake;
 
 @TeleOp(name = "TeleOp Red", group = "0")
-public class TeleOpV2 extends OpMode {
+public class TeleOpV2_Red extends OpMode {
 
     // Gamepad 1
     // left stick, triggers - movement

@@ -23,7 +23,7 @@ public class RunLinear extends Action {
             childActions[actionIndex].end(context);
             actionIndex++;
 
-            if(!_hasFinished(context))
+            if(!hasFinished(context))
                 childActions[actionIndex].start(context);
         } else childActions[actionIndex].tick(context);
     }
@@ -36,7 +36,7 @@ public class RunLinear extends Action {
     @Override
     public void _end(AutonomousOpMode context) {
         // when finishing forcibly (e.g. RunParallelRace)
-        if(!_hasFinished(context))
+        if(!hasFinished(context))
             childActions[actionIndex].end(context);
     }
 }

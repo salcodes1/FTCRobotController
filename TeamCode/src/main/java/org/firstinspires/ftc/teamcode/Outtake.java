@@ -41,13 +41,14 @@ public class Outtake {
 		mid,
 		high,
 		loading
-	};
+	}
+
 	Level currentLevel;
 
-	int LOADING_TICKS = 0;
-	int LOW_TICKS = -100;
-	int MID_TICKS = 550;
-	int HIGH_TICKS = 1400;
+	static public int LOADING_TICKS = 0;
+	static public int LOW_TICKS = -100;
+	static public int MID_TICKS = 550;
+	static public int HIGH_TICKS = 1300;
 
 	public static double SERVO_ARMED = 0.8;
 	public static double SERVO_DROP_LOW = 0.4;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.specialized;
+package org.firstinspires.ftc.teamcode.specialized.prev;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
@@ -13,11 +13,8 @@ import org.firstinspires.ftc.teamcode.bt.Action;
 import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
 import org.firstinspires.ftc.teamcode.bt.actions.RunCarousel;
 import org.firstinspires.ftc.teamcode.bt.actions.RunTrajectory;
-import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunDelay;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunLinear;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunParallelWait;
-import org.firstinspires.ftc.teamcode.bt.actions.intake.IntakeSetPower;
-import org.firstinspires.ftc.teamcode.bt.actions.intake.IntakeWaitForElement;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeDropFreight;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeSetLevel;
 import org.firstinspires.ftc.teamcode.statics.PoseStorage;
@@ -66,7 +63,7 @@ public class AutoOpV3_Blue extends AutonomousOpMode {
     }
 
     @Override
-    protected void otherInit() {
+    protected void initStart() {
         // CAMERA INITIALIZATION
         capstoneDetection = new CapstoneDetectPipeline();
 
@@ -96,7 +93,7 @@ public class AutoOpV3_Blue extends AutonomousOpMode {
     }
 
     @Override
-    protected void initLoop() {
+    protected void initTick() {
         switch (capstoneDetection.capstoneSegment) {
             case 3:
                 preloadLevel = Outtake.Level.high;

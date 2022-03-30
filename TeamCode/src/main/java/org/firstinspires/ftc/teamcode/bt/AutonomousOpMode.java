@@ -7,13 +7,17 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Intake;
+import org.firstinspires.ftc.teamcode.OpenCV.CapstoneDetectPipeline;
 import org.firstinspires.ftc.teamcode.Outtake;
 import org.firstinspires.ftc.teamcode.RR.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.statics.PoseStorage;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.io.StringWriter;
-import java.util.HashMap;
 
 import hu.webarticum.treeprinter.ListingTreePrinter;
 import hu.webarticum.treeprinter.SimpleTreeNode;
@@ -28,6 +32,12 @@ public abstract class AutonomousOpMode extends LinearOpMode {
     public Intake intake;
     public Servo containerServo;
 
+
+    public CapstoneDetectPipeline capstoneDetection;
+    public WebcamName webcamName;
+    public OpenCvCamera camera;
+
+    public Outtake.Level preloadLevel = Outtake.Level.high;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -56,10 +66,10 @@ public abstract class AutonomousOpMode extends LinearOpMode {
         telemetry.addLine("Done precompiling");
         telemetry.update();
 
-        otherInit();
+        initStart();
 
         while(!isStarted()) {
-            initLoop();
+            initTick();
             telemetry.update();
         }
 
@@ -79,7 +89,6 @@ public abstract class AutonomousOpMode extends LinearOpMode {
 
     }
 
-    protected abstract void initLoop();
 
     private void printActionTree() {
         StringWriter w = new StringWriter();
@@ -104,7 +113,9 @@ public abstract class AutonomousOpMode extends LinearOpMode {
 
     protected abstract void precompileTrajectories();
 
-    protected abstract void otherInit();
+    protected abstract void initStart();
+
+    protected abstract void initTick();
 
     protected abstract Action getRoutine();
 }
