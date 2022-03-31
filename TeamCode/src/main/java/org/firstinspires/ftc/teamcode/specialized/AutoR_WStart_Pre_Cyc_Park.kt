@@ -28,7 +28,7 @@ class AutoR_WStart_Pre_Cyc_Park: AutoOpV4Base() {
                 RunTrajectory(start_to_hub)
             ),
             OuttakeDropFreight(),
-            DoNCycles(4, wPoints, hPoints),
+            DoNCycles(4, wPoints, hPoints, side),
             RunTrajectory(hub_to_park)
         )
 }

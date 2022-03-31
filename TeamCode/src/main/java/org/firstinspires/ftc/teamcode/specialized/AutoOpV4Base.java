@@ -163,33 +163,36 @@ abstract public class AutoOpV4Base extends AutonomousOpMode {
         private final int noCycles;
         private Vector2d[] wPoints;
         private Vector2d[] hPoints;
+        private Side side;
         private Trajectory transitionTrajectory;
 
 
-        public  DoNCycles(int noCycles, Vector2d[] wPoints, Vector2d[] hPoints) {
+        public  DoNCycles(int noCycles, Vector2d[] wPoints, Vector2d[] hPoints, Side side) {
             this.noCycles = noCycles;
             this.wPoints = wPoints;
             this.hPoints = hPoints;
+            this.side = side;
         }
 
-        public DoNCycles(int noCycles, Vector2d[] wPoints, Vector2d[] hPoints, Trajectory transitionTrajectory) {
+        public DoNCycles(int noCycles, Vector2d[] wPoints, Vector2d[] hPoints, Side side, Trajectory transitionTrajectory) {
             this.noCycles = noCycles;
             this.wPoints = wPoints;
             this.hPoints = hPoints;
+            this.side = side;
             this.transitionTrajectory = transitionTrajectory;
         }
 
         Trajectory get_h_to_w(AutonomousOpMode context, int cycleNo) {
-            return context.drive.trajectoryBuilder(new Pose2d(-12.00 + hPoints[cycleNo].getX(), -43.25 + hPoints[cycleNo].getY(), Math.toRadians(-90)), Math.toRadians(-90))
-                .splineToSplineHeading(new Pose2d(17.00, -65.70, Math.toRadians(0)), Math.toRadians(0))
-                .lineToLinearHeading(new Pose2d(43.00 + wPoints[cycleNo].getX(), -65.70 + wPoints[cycleNo].getY(), Math.toRadians(0)))
+            return context.drive.trajectoryBuilder(new Pose2d(-12.00 + hPoints[cycleNo].getX(), (-43.25 + hPoints[cycleNo].getY()) * (side == Side.RED? 1 : -1), Math.toRadians(-90) * (side == Side.RED? 1 :-1)), Math.toRadians(-90) * (side == Side.RED? 1 :-1))
+                .splineToSplineHeading(new Pose2d(17.00, -65.70 * (side == Side.RED? 1 : -1), Math.toRadians(0) * (side == Side.RED? 1 :-1)), Math.toRadians(0) * (side == Side.RED? 1 :-1))
+                .lineToLinearHeading(new Pose2d(43.00 + wPoints[cycleNo].getX(), (-65.70 + wPoints[cycleNo].getY()) * (side == Side.RED? 1 : -1), Math.toRadians(0) * (side == Side.RED? 1 :-1)))
                 .build();
         }
 
         Trajectory get_w_to_h(AutonomousOpMode context, int cycleNo) {
-            return context.drive.trajectoryBuilder(new Pose2d(43.00 + wPoints[cycleNo].getX(), -65.70 + wPoints[cycleNo].getY(), Math.toRadians(0)), Math.toRadians(180))
-                .lineToConstantHeading(new Vector2d(17.00, -65.70))
-                .splineTo(new Vector2d(-12.00 + hPoints[cycleNo].getX(), -43.25 + hPoints[cycleNo].getY()), Math.toRadians(90))
+            return context.drive.trajectoryBuilder(new Pose2d(43.00 + wPoints[cycleNo].getX(), (-65.70 + wPoints[cycleNo].getY()) * (side == Side.RED? 1 : -1), Math.toRadians(0) * (side == Side.RED? 1 :-1)), Math.toRadians(180) * (side == Side.RED? 1 :-1))
+                .lineToConstantHeading(new Vector2d(17.00, -65.70 * (side == Side.RED? 1 : -1)))
+                .splineTo(new Vector2d(-12.00 + hPoints[cycleNo].getX(), (-43.25 + hPoints[cycleNo].getY()) * (side == Side.RED? 1 : -1)), Math.toRadians(90) * (side == Side.RED? 1 :-1))
                 .build();
         }
 

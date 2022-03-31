@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.specialized;
 
+
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Outtake;
-import org.firstinspires.ftc.teamcode.RR.util.AssetsTrajectoryManager;
 import org.firstinspires.ftc.teamcode.bt.Action;
 import org.firstinspires.ftc.teamcode.bt.actions.RunTrajectory;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunAsync;
@@ -14,20 +14,11 @@ import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunParallelWait;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeDropFreight;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeSetLevel;
 
-@Autonomous(name = "Red Warehouse Cycles Park")
-public class AutoOpV4_RedWarehouseCyclesPark extends AutoOpV4Base {
-
+@Autonomous(name = "Blue Warehouse Cycles Park")
+public class AutoOpV4_BlueWarehouseCyclesPark extends AutoOpV4_RedWarehouseCyclesPark{
     @Override
     protected void setParams() {
-        side = Side.RED;
-    }
-
-    @Override
-    protected void precompileTrajectories() {
-        startLocation = StartLocation.WAREHOUSE;
-
-        start_to_hub = AssetsTrajectoryManager.load(SIDE("wstart_to_hub"));
-
+        side = Side.BLUE;
     }
 
     @Override
@@ -49,9 +40,9 @@ public class AutoOpV4_RedWarehouseCyclesPark extends AutoOpV4Base {
                 },
                 //hub
                 new Vector2d[] {
-                    new Vector2d(0, -5),
-                    new Vector2d(0, -5),
-                    new Vector2d(2, -5)
+                    new Vector2d(0, 0),
+                    new Vector2d(0, 0),
+                    new Vector2d(2, 0)
                 },
                 side
             ),

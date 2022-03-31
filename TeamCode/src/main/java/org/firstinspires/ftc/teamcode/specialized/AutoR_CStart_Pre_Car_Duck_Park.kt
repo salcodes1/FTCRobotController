@@ -32,7 +32,7 @@ class AutoR_CStart_Pre_Car_Duck_Park : AutoOpV4Base() {
             ),
             RunTrajectory(hub_to_carousel),
             RunCarousel(2125, 0.25),
-            DoNCycles(4, wPoints, carousel_to_warehouse),
+            DoNCycles(4, wPoints, carousel_to_warehouse, side),
             RunTrajectory(hub_to_park)
     )
 }

@@ -69,7 +69,6 @@ public class Outtake {
 
 		capServo = opMode.hardwareMap.get(Servo.class, "servoCapArm");
 		capServo.setPosition(0.9);
-
 	}
 
 	public void setLevel(Level level) {
