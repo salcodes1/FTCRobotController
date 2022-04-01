@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunInline;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunLinear;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunParallelWait;
 import org.firstinspires.ftc.teamcode.bt.actions.intake.IntakeSetPower;
+import org.firstinspires.ftc.teamcode.bt.actions.intake.IntermediarySetRunning;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeDropFreight;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeSetLevel;
 
@@ -27,7 +28,7 @@ import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeSetLevel;
 public class AutoOpV4_RedCarouselDuckPark extends AutoOpV4Base {
 
     TrajectorySequence hub_to_carousel;
-    Trajectory carousel_to_warehouse, carousel_to_park;
+    Trajectory carousel_to_warehouse, carousel_to_park, hub_to_storage;
 
     @Override
     protected void setParams() {
@@ -37,13 +38,15 @@ public class AutoOpV4_RedCarouselDuckPark extends AutoOpV4Base {
     protected void precompileTrajectories() {
         startLocation = StartLocation.CAROUSEL;
 
-        start_to_hub = AssetsTrajectoryManager.load(SIDE("cstart_to_hub"));
+        start_to_hub = AssetsTrajectoryManager.load(SIDE("cstart_to_hub_q"));
         hub_to_carousel = drive.trajectorySequenceBuilder(new Pose2d(-12, -43.25, Math.toRadians(-90)))
-            .addTrajectory(AssetsTrajectoryManager.load(SIDE("hub_to_carousel")))
+            .addTrajectory(AssetsTrajectoryManager.load(SIDE("hub_to_carousel_q")))
             .build();
         carousel_to_warehouse = AssetsTrajectoryManager.load(SIDE("carousel_to_warehouse"));
         carousel_to_park = AssetsTrajectoryManager.load(SIDE("carousel_to_bridge"));
         carousel_to_hub = AssetsTrajectoryManager.load(SIDE("carousel_to_hub_wduck"));
+        hub_to_storage = AssetsTrajectoryManager.load(SIDE("hub_to_storage"));
+
     }
 
     @Override
@@ -70,12 +73,17 @@ public class AutoOpV4_RedCarouselDuckPark extends AutoOpV4Base {
                 new RunTrajectory(carousel_to_hub),
                 new RunLinear(
                     new IntakeSetPower(-1),
-                    new RunDelay(5000),
+                    new IntermediarySetRunning(true),
+                    new RunDelay(6500),
                     new OuttakeSetLevel(Outtake.Level.high)
                 )
             ),
+            new IntakeSetPower(0),
             new OuttakeDropFreight(),
-            new OuttakeSetLevel(Outtake.Level.loading)
+            new RunParallelWait(
+                    new OuttakeSetLevel(Outtake.Level.loading),
+                    new RunTrajectory(hub_to_storage)
+            )
         );
     }
 }

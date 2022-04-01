@@ -4,6 +4,8 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.OpenCV.CapstoneDetectPipeline;
 import org.firstinspires.ftc.teamcode.Outtake;
 import org.firstinspires.ftc.teamcode.bt.Action;
 import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
@@ -20,6 +22,9 @@ import org.firstinspires.ftc.teamcode.bt.actions.intake.IntermediarySetRunning;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeDropFreight;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeSetLevel;
 import org.firstinspires.ftc.teamcode.statics.PoseStorage;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
@@ -64,52 +69,53 @@ abstract public class AutoOpV4Base extends AutonomousOpMode {
         }
 
         // CAMERA INITIALIZATION
-//        capstoneDetection = new CapstoneDetectPipeline();
-//
-//        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
-//        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-//
-//        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-//        camera.setPipeline(capstoneDetection);
-//
-//        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-//            @Override
-//            public void onOpened() {
-//                camera.startStreaming(1920, 1080, OpenCvCameraRotation.UPRIGHT);
-////                camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
-//            }
-//
-//            @Override
-//            public void onError(int errorCode) {
-//                telemetry.addLine("Camera couldn't init!!!" + "Error " + errorCode);
-//            }
-//        });
-//
-//
-//        telemetry.addLine("init complete");
-//        telemetry.update();
+        capstoneDetection = new CapstoneDetectPipeline();
+
+        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+
+        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+        camera.setPipeline(capstoneDetection);
+
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                camera.startStreaming(1920, 1080, OpenCvCameraRotation.UPRIGHT);
+//                camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                telemetry.addLine("Camera couldn't init!!!" + "Error " + errorCode);
+            }
+        });
+
+
+        telemetry.addLine("init complete");
+        telemetry.update();
     }
 
     @Override
     protected void initTick() {
         preloadLevel = Outtake.Level.high;
-//        switch (capstoneDetection.capstoneSegment) {
-//            case 3:
-//                preloadLevel = Outtake.Level.high;
-//                telemetry.addLine("high");
-//                break;
-//            case 2:
-//                preloadLevel = Outtake.Level.mid;
-//                telemetry.addLine("mid");
-//                break;
-//            case 1:
-//                preloadLevel = Outtake.Level.low;
-//                telemetry.addLine("low");
-//                break;
-//            default:
-//                preloadLevel = Outtake.Level.high;
-//                telemetry.addLine("not detected but set to high");
-//        }
+        switch (capstoneDetection.capstoneSegment) {
+            case 3:
+                preloadLevel = Outtake.Level.high;
+                telemetry.addLine("high");
+                break;
+            case 2:
+                preloadLevel = Outtake.Level.mid;
+
+                telemetry.addLine("mid");
+                break;
+            case 1:
+                preloadLevel = Outtake.Level.low;
+                telemetry.addLine("low");
+                break;
+            default:
+                preloadLevel = Outtake.Level.high;
+                telemetry.addLine("not detected but set to high");
+        }
     }
 
 
@@ -129,7 +135,6 @@ abstract public class AutoOpV4Base extends AutonomousOpMode {
         protected Action constructGroupAtStart(AutonomousOpMode context) {
             return new RunLinear(
                 new RunParallelWait(
-                    new OuttakeSetLevel(Outtake.Level.loading),
                     new RunTrajectory(h_to_w),
                     new IntakeSetPower(-1),
                     new IntermediarySetRunning(true),
@@ -137,7 +142,7 @@ abstract public class AutoOpV4Base extends AutonomousOpMode {
                     new RunLinear(
                         new RunParallelRace(
                             new IntakeWaitForElement(),
-                            new RunDelay(5000)
+                            new RunDelay(4500)
                         ),
                         new IntakeSetPower(0),
                         new IntakeSetExtender(0)
@@ -153,8 +158,8 @@ abstract public class AutoOpV4Base extends AutonomousOpMode {
                         new OuttakeSetLevel(Outtake.Level.high)
                     )
                 ),
-                new OuttakeDropFreight()
-
+                new OuttakeDropFreight(),
+                new OuttakeSetLevel(Outtake.Level.loading)
             );
         }
     }
