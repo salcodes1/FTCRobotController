@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.bt.actions.outtake;
 
+import android.os.Debug;
+import android.util.Log;
+
 import org.firstinspires.ftc.teamcode.Outtake;
 import org.firstinspires.ftc.teamcode.bt.Action;
 import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;

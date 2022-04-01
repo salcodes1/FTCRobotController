@@ -39,20 +39,21 @@ public class AutoOpV4_RedWarehouseCyclesPark extends AutoOpV4Base {
                 new OuttakeSetLevel(preloadLevel)
             ),
             new OuttakeDropFreight(),
-            new OuttakeSetLevel(Outtake.Level.loading),
             new DoNCycles(
-                3,
+                4,
                 //warehouse
                 new Vector2d[] {
                     new Vector2d(4, 0),
-                    new Vector2d(6, 0),
-                    new Vector2d(8, 0)
+                    new Vector2d(6.5, -1),
+                    new Vector2d(9, -2),
+                        new Vector2d(0, 0 )
                 },
                 //hub
                 new Vector2d[] {
                     new Vector2d(0, -2),
                     new Vector2d(0, -2),
-                    new Vector2d(0, -2)
+                    new Vector2d(0, -2),
+                        new Vector2d(0, 0)
                 },
                 side
             ),

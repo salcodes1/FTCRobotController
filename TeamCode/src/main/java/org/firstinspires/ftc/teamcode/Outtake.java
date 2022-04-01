@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.util.Log;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -63,7 +65,7 @@ public class Outtake {
 		motor = opMode.hardwareMap.get(DcMotor.class, "motorOuttake");
 		servo = opMode.hardwareMap.get(Servo.class, "servoOuttake");
 
-		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 		servo.setPosition(SERVO_ARMED);
 
@@ -120,11 +122,16 @@ public class Outtake {
 
 	public void update()
 	{
+		Log.d("XX", motor.getCurrentPosition() + " " + motor.getTargetPosition() + " " +  motor.getPower());
 
 		if(!motor.isBusy())
 		{
 			hasFinished = true;
+			Log.d("XX", "aaa");
 			motor.setPower(0);
+		} else {
+			hasFinished = false;
+			motor.setPower(1);
 		}
 
 		for(int i = 0; i < actionQueue.size(); i++)

@@ -39,7 +39,7 @@ public class AutoOpV4_RedCarouselDuckPark extends AutoOpV4Base {
         startLocation = StartLocation.CAROUSEL;
 
         start_to_hub = AssetsTrajectoryManager.load(SIDE("cstart_to_hub_q"));
-        hub_to_carousel = drive.trajectorySequenceBuilder(new Pose2d(-12, -43.25, Math.toRadians(-90)))
+        hub_to_carousel = drive.trajectorySequenceBuilder(new Pose2d(-12, -43.25 * (side == Side.RED? 1 : -1), Math.toRadians(-90)  * (side == Side.RED? 1 : -1)))
             .addTrajectory(AssetsTrajectoryManager.load(SIDE("hub_to_carousel_q")))
             .build();
         carousel_to_warehouse = AssetsTrajectoryManager.load(SIDE("carousel_to_warehouse"));
@@ -68,7 +68,7 @@ public class AutoOpV4_RedCarouselDuckPark extends AutoOpV4Base {
                 ),
                 new RunTrajectory(hub_to_carousel)
             ),
-            new RunCarousel(-1800, 0.25),
+            new RunCarousel(-1800 * (side == Side.RED? 1 : -1), 0.25),
             new RunParallelWait(
                 new RunTrajectory(carousel_to_hub),
                 new RunLinear(

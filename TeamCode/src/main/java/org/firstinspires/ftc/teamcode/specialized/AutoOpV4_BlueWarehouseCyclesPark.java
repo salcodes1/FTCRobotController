@@ -34,15 +34,15 @@ public class AutoOpV4_BlueWarehouseCyclesPark extends AutoOpV4_RedWarehouseCycle
                 3,
                 //warehouse
                 new Vector2d[] {
-                    new Vector2d(0, 0),
-                    new Vector2d(2, 0),
-                    new Vector2d(4, 0)
+                    new Vector2d(2, -2),
+                    new Vector2d(4, -3),
+                    new Vector2d(6, -4)
                 },
                 //hub
                 new Vector2d[] {
-                    new Vector2d(1, 0),
-                    new Vector2d(1, 0),
-                    new Vector2d(2, 0)
+                    new Vector2d(0, -2),
+                    new Vector2d(0, -2.5),
+                    new Vector2d(0, -2.5)
                 },
                 side
             ),
