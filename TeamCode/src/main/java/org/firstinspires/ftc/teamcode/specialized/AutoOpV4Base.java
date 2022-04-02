@@ -119,7 +119,7 @@ abstract public class AutoOpV4Base extends AutonomousOpMode {
 				telemetry.addLine("high");
 				break;
 			case 2:
-				preloadLevel = Outtake.Level.mid;
+				preloadLevel = Outtake.Level.mid_auto;
 
 				telemetry.addLine("mid");
 				break;
@@ -188,12 +188,12 @@ abstract public class AutoOpV4Base extends AutonomousOpMode {
 							new RunTrajectory(h_to_w),
 							new IntakeSetPower(-1),
 							new IntermediarySetRunning(true),
-							new IntakeSetExtender(0.5),
+							new IntakeSetExtender(1.0),
 							new OuttakeSetLevel(Outtake.Level.loading),
 							new RunLinear(
 									new RunParallelRace(
 											new IntakeWaitForElement(),
-											new RunDelay(4500)
+											new RunDelay(4000)
 									),
 									new IntakeSetPower(0),
 									new IntakeSetExtender(0)
@@ -203,9 +203,11 @@ abstract public class AutoOpV4Base extends AutonomousOpMode {
 					new RunParallelWait(
 							new RunTrajectory(w_to_h),
 							new RunLinear(
-									new RunDelay(500),
+									new RunDelay(600),
 									new IntakeSetPower(-1),
 									new RunDelay(1300),
+									new IntakeSetPower(1),
+									new IntermediarySetRunning(true),
 									new OuttakeSetLevel(Outtake.Level.high)
 							)
 					),

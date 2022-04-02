@@ -43,15 +43,17 @@ public class Outtake {
 		low,
 		mid,
 		high,
-		loading
+		loading,
+		mid_auto
 	}
 
 	Level currentLevel;
 
 	static public int LOADING_TICKS = 0;
-	static public int LOW_TICKS = -100;
-	static public int MID_TICKS = 550;
-	static public int HIGH_TICKS = 1300;
+	static public int LOW_TICKS = -50;
+	static public int MID_TICKS = 450;
+	static public int MID_AUTO_TICKS = 550;
+	static public int HIGH_TICKS = 1350;
 
 	public static double SERVO_ARMED = 0.8;
 	public static double SERVO_DROP_LOW = 0.4;
@@ -65,12 +67,12 @@ public class Outtake {
 		motor = opMode.hardwareMap.get(DcMotor.class, "motorOuttake");
 		servo = opMode.hardwareMap.get(Servo.class, "servoOuttake");
 
-//		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 		servo.setPosition(SERVO_ARMED);
 
 		capServo = opMode.hardwareMap.get(Servo.class, "servoCapArm");
-		capServo.setPosition(0.9);
+		capServo.setPosition(0.75);
 	}
 
 	public void setLevel(Level level) {
@@ -92,6 +94,10 @@ public class Outtake {
 				break;
 			case loading:
 				goToTicks(LOADING_TICKS);
+				break;
+			case mid_auto:
+				servo.setPosition(SERVO_ARMED);
+				goToTicks(MID_AUTO_TICKS);
 				break;
 		}
 	}

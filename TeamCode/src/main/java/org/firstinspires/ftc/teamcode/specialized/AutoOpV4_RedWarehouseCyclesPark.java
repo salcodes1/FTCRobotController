@@ -26,6 +26,7 @@ public class AutoOpV4_RedWarehouseCyclesPark extends AutoOpV4Base {
     protected void precompileTrajectories() {
         startLocation = StartLocation.WAREHOUSE;
 
+        hub_to_park = AssetsTrajectoryManager.load(SIDE("hub_to_park"));
         start_to_hub = AssetsTrajectoryManager.load(SIDE("wstart_to_hub"));
 
     }
@@ -40,26 +41,21 @@ public class AutoOpV4_RedWarehouseCyclesPark extends AutoOpV4Base {
             ),
             new OuttakeDropFreight(),
             new DoNCycles(
-                4,
+                3,
                 //warehouse
                 new Vector2d[] {
-                    new Vector2d(4, 0),
-                    new Vector2d(6.5, -1),
-                    new Vector2d(9, -2),
-                        new Vector2d(0, 0 )
+                    new Vector2d(3, 0),
+                    new Vector2d(5.5, -2),
+                    new Vector2d(8, -3),
                 },
                 //hub
                 new Vector2d[] {
                     new Vector2d(0, -2),
                     new Vector2d(0, -2),
                     new Vector2d(0, -2),
-                        new Vector2d(0, 0)
                 },
                 side
             ),
-            new RunAsync((ctx) -> hub_to_park = drive.trajectoryBuilder(drive.getPoseEstimate(), 0)
-                .splineToConstantHeading(new Vector2d(-60, -35), 0)
-                .build()),
             new RunParallelWait(
                 new RunTrajectory(hub_to_park),
                 new OuttakeSetLevel(Outtake.Level.loading)

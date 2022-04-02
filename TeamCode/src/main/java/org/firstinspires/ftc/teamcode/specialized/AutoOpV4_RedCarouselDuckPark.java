@@ -74,7 +74,7 @@ public class AutoOpV4_RedCarouselDuckPark extends AutoOpV4Base {
                 new RunLinear(
                     new IntakeSetPower(-1),
                     new IntermediarySetRunning(true),
-                    new RunDelay(6500),
+                    new RunDelay(8500),
                     new OuttakeSetLevel(Outtake.Level.high)
                 )
             ),

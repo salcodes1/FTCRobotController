@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.specialized.prev;
 import static org.firstinspires.ftc.teamcode.Outtake.SERVO_LOADING;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -102,6 +103,13 @@ public class TeleOpV2_Red extends OpMode {
         g2.update();
         outtake.update();
 
+        if(Math.abs(gamepad2.right_stick_y) > 0.4) {
+            outtake.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            Log.d("FF", Double.toString(gamepad2.left_stick_y * 0.5));
+            outtake.motor.setPower(gamepad2.right_stick_y * 0.5);
+        }
+        if(g2.getButtonDown("joystick_right")) outtake.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         drive.vectorMove(-gamepad1.left_stick_x,
             gamepad1.left_stick_y,
@@ -112,12 +120,12 @@ public class TeleOpV2_Red extends OpMode {
 
         telemetry.update();
 
-        carouselMotor.setPower(carouselState ? -0.33 : 0.0);
+        carouselMotor.setPower(carouselState ? -0.40 : 0.0);
         intakeMotor.setPower(g2.getButton("b") ? 1.0 : intakeState != IntakeState.None? -1.0 : 0.0);
         intermediaryMotor.setPower(g2.getButton("b") ? 1.0 : intakeState != IntakeState.None ? -1.0 : 0.0);
 
 
-        if(gamepad2.left_trigger > 0.1 && capPos > 0.15) {
+        if(gamepad2.left_trigger > 0.1 && capPos > 0.0) {
             capPos -= 0.002;
         }
         if(gamepad2.right_trigger > 0.1 && capPos < 0.65) {
@@ -125,8 +133,8 @@ public class TeleOpV2_Red extends OpMode {
         }
 
         if (g2.getButtonDown("y")) {
-            if(capPos < (0.15 + 0.65) / 2) capPos = 0.65;
-            else capPos = 0.15;
+            if(capPos < (0.0 + 0.65) / 2) capPos = 0.65;
+            else capPos = 0.0;
         }
 
         if(g2.getButtonDown("bumper_right")) {

@@ -8,29 +8,24 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 @TeleOp
 public class OpModeDumb extends OpMode {
 
-    DigitalChannel touchSensor;
-
-    DcMotor m1, m2, m3, m4;
+    DigitalChannel touchSensor1, touchSensor2, touchSensor3;
 
     @Override
     public void init() {
-        touchSensor = hardwareMap.get(DigitalChannel.class, "touchSensor");
-        touchSensor.setMode(DigitalChannel.Mode.INPUT);
+        touchSensor2 = hardwareMap.get(DigitalChannel.class, "touchSensor2");
+        touchSensor1 = hardwareMap.get(DigitalChannel.class, "touchSensor1");
+        touchSensor3 = hardwareMap.get(DigitalChannel.class, "touchSensor3");
+        touchSensor1.setMode(DigitalChannel.Mode.INPUT);
+        touchSensor2.setMode(DigitalChannel.Mode.INPUT);
+        touchSensor3.setMode(DigitalChannel.Mode.INPUT);
 
-
-        m1 = hardwareMap.get(DcMotor.class, "motorBL");
-        m2 = hardwareMap.get(DcMotor.class, "motorBR");
-        m3 = hardwareMap.get(DcMotor.class, "motorFL");
-        m4 = hardwareMap.get(DcMotor.class, "motorFR");
     }
 
     @Override
     public void loop() {
-        telemetry.addData("touchSensor", touchSensor.getState()? "true": "false");
-        telemetry.addData("motorBL", m1.getCurrentPosition());
-        telemetry.addData("motorBR", m2.getCurrentPosition());
-        telemetry.addData("motorFL", m3.getCurrentPosition());
-        telemetry.addData("motorFR", m4.getCurrentPosition());
+        telemetry.addData("touchSensor1", touchSensor1.getState()? "true": "false");
+        telemetry.addData("touchSensor2", touchSensor2.getState()? "true": "false");
+        telemetry.addData("touchSensor3", touchSensor3.getState()? "true": "false");
 
     }
 }

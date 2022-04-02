@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunAsync;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunInline;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunLinear;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunParallelWait;
+import org.firstinspires.ftc.teamcode.bt.actions.intake.IntakeSetExtender;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeDropFreight;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeSetLevel;
 
@@ -34,9 +35,9 @@ public class AutoOpV4_BlueWarehouseCyclesPark extends AutoOpV4_RedWarehouseCycle
                 3,
                 //warehouse
                 new Vector2d[] {
-                    new Vector2d(2, -2),
-                    new Vector2d(4, -3),
-                    new Vector2d(6, -4)
+                    new Vector2d(-8.5, -2),
+                    new Vector2d(-6, -3),
+                    new Vector2d(-5, -4)
                 },
                 //hub
                 new Vector2d[] {
@@ -46,6 +47,7 @@ public class AutoOpV4_BlueWarehouseCyclesPark extends AutoOpV4_RedWarehouseCycle
                 },
                 side
             ),
+            new IntakeSetExtender(0.0),
             new RunAsync((ctx) -> hub_to_park = drive.trajectoryBuilder(drive.getPoseEstimate(), 0)
                 .splineToConstantHeading(new Vector2d(-60, -35), 0)
                 .build()),
