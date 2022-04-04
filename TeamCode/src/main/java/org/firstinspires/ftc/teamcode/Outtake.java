@@ -44,7 +44,10 @@ public class Outtake {
 		mid,
 		high,
 		loading,
-		mid_auto
+		mid_auto,
+		S_low,
+		S_mid,
+		S_high
 	}
 
 	Level currentLevel;
@@ -54,6 +57,11 @@ public class Outtake {
 	static public int MID_TICKS = 450;
 	static public int MID_AUTO_TICKS = 550;
 	static public int HIGH_TICKS = 1350;
+
+	static public int S_LOW_TICKS = -50;
+	static public int S_MID_TICKS = 225;
+	static public int S_HIGH_TICKS = 450;
+
 
 	public static double SERVO_ARMED = 0.8;
 	public static double SERVO_DROP_LOW = 0.4;
@@ -98,6 +106,18 @@ public class Outtake {
 			case mid_auto:
 				servo.setPosition(SERVO_ARMED);
 				goToTicks(MID_AUTO_TICKS);
+				break;
+			case S_low:
+				servo.setPosition(SERVO_ARMED);
+				goToTicks(S_LOW_TICKS);
+				break;
+			case S_mid:
+				servo.setPosition(SERVO_ARMED);
+				goToTicks(S_MID_TICKS);
+				break;
+			case S_high:
+				servo.setPosition(SERVO_ARMED);
+				goToTicks(S_HIGH_TICKS);
 				break;
 		}
 	}

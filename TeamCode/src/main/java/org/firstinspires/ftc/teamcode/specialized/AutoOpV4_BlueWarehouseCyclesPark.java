@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.specialized;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Outtake;
 import org.firstinspires.ftc.teamcode.bt.Action;
@@ -14,7 +15,7 @@ import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunParallelWait;
 import org.firstinspires.ftc.teamcode.bt.actions.intake.IntakeSetExtender;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeDropFreight;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeSetLevel;
-
+@Disabled
 @Autonomous(name = "Blue Warehouse Cycles Park")
 public class AutoOpV4_BlueWarehouseCyclesPark extends AutoOpV4_RedWarehouseCyclesPark{
     @Override
@@ -35,9 +36,12 @@ public class AutoOpV4_BlueWarehouseCyclesPark extends AutoOpV4_RedWarehouseCycle
                 3,
                 //warehouse
                 new Vector2d[] {
-                    new Vector2d(-8.5, -2),
-                    new Vector2d(-6, -3),
-                    new Vector2d(-5, -4)
+//                    new Vector2d(-8.5, -2),
+//                    new Vector2d(-6, -3),
+//                    new Vector2d(-5, -4)
+                    new Vector2d(-6.5, -2),
+                    new Vector2d(-4, -3),
+                    new Vector2d(-3, -4)
                 },
                 //hub
                 new Vector2d[] {

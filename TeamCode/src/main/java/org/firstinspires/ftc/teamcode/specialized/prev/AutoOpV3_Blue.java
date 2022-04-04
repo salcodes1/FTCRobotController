@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.specialized.prev;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.OpenCV.CapstoneDetectPipeline;
@@ -21,7 +22,7 @@ import org.firstinspires.ftc.teamcode.statics.PoseStorage;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-
+@Disabled
 @Autonomous(name = "Autonomie Blue", group = "0prod")
 public class AutoOpV3_Blue extends AutonomousOpMode {
 

@@ -111,21 +111,18 @@ public class TeleOpV2_Blue extends OpMode {
         }
         if(g2.getButtonDown("joystick_right")) outtake.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        drive.vectorMove(-gamepad1.left_stick_x,
-                gamepad1.left_stick_y,
-                gamepad1.left_trigger - gamepad1.right_trigger,
-                (gamepad1.right_bumper? 0.3 : 0.75));
+        drive.vectorMove(-gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_trigger - gamepad1.right_trigger, 0.75);
 
-        if (g2.getButtonDown("bumper_left")) carouselState = !carouselState;
+        if (g1.getButtonDown("bumper_left")) carouselState = !carouselState;
 
         telemetry.update();
 
-        carouselMotor.setPower(carouselState ? 0.4 : 0.0);
+        carouselMotor.setPower(carouselState ? (g1.getButton("bumper_right") ? 0.7 : 0.43) : 0.0);
         intakeMotor.setPower(g2.getButton("b") ? 1.0 : intakeState != IntakeState.None? -1.0 : 0.0);
         intermediaryMotor.setPower(g2.getButton("b") ? 1.0 : intakeState != IntakeState.None ? -1.0 : 0.0);
 
 
-        if(gamepad2.left_trigger > 0.1 && capPos > 0.15) {
+        if(gamepad2.left_trigger > 0.1 && capPos > 0.0) {
             capPos -= 0.002;
         }
         if(gamepad2.right_trigger > 0.1 && capPos < 0.65) {
@@ -133,8 +130,8 @@ public class TeleOpV2_Blue extends OpMode {
         }
 
         if (g2.getButtonDown("y")) {
-            if(capPos < (0.15 + 0.65) / 2) capPos = 0.65;
-            else capPos = 0.15;
+            if(capPos < (0.0 + 0.65) / 2) capPos = 0.65;
+            else capPos = 0.0;
         }
 
         if(g2.getButtonDown("bumper_right")) {
@@ -143,7 +140,7 @@ public class TeleOpV2_Blue extends OpMode {
 
         servoCapArm.setPosition(capPos);
 
-        if (g2.getButtonDown("dpad_down")) outtake.setLevel(Outtake.Level.low);
+        if (g2.getButtonDown("dpad_down")) outtake.setLevel(Outtake.Level.S_mid);
         if (g2.getButtonDown("dpad_left") || g2.getButtonDown("dpad_right"))
             outtake.setLevel(Outtake.Level.mid);
         if (g2.getButtonDown("dpad_up")) outtake.setLevel(Outtake.Level.high);

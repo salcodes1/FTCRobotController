@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.specialized;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Outtake;
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunParallelWait;
 import org.firstinspires.ftc.teamcode.bt.actions.intake.IntakeSetPower;
 import org.firstinspires.ftc.teamcode.bt.actions.intake.IntakeWaitForElement;
 import org.firstinspires.ftc.teamcode.bt.actions.intake.IntermediarySetRunning;
-
+@Disabled
 @Autonomous(name="AutoDumb")
 public class AutoDumb extends OpMode {
 //    @Override

@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.Outtake.SERVO_LOADING;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.Outtake;
 
 import java.util.Arrays;
 
+@Disabled
 @TeleOp(name = "TeleOp Red", group = "0")
 public class TeleOpV2_Red extends OpMode {
 
@@ -111,16 +113,13 @@ public class TeleOpV2_Red extends OpMode {
         if(g2.getButtonDown("joystick_right")) outtake.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-        drive.vectorMove(-gamepad1.left_stick_x,
-            gamepad1.left_stick_y,
-            gamepad1.left_trigger - gamepad1.right_trigger,
-            (gamepad1.right_bumper? 0.3 : 0.75));
+        drive.vectorMove(-gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_trigger - gamepad1.right_trigger,  0.75);
 
-        if (g2.getButtonDown("bumper_left")) carouselState = !carouselState;
+        if (g1.getButtonDown("bumper_left")) carouselState = !carouselState;
 
         telemetry.update();
 
-        carouselMotor.setPower(carouselState ? -0.40 : 0.0);
+        carouselMotor.setPower(carouselState ? (g1.getButton("bumper_right") ? -0.7 : -0.43) : 0.0);
         intakeMotor.setPower(g2.getButton("b") ? 1.0 : intakeState != IntakeState.None? -1.0 : 0.0);
         intermediaryMotor.setPower(g2.getButton("b") ? 1.0 : intakeState != IntakeState.None ? -1.0 : 0.0);
 
