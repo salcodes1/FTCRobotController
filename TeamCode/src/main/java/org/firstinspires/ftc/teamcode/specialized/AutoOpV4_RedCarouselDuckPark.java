@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.bt.actions.intake.IntermediarySetRunning;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeDropFreight;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeSetLevel;
 
+@Autonomous(name = "Red Carousel Duck Park")
 public class AutoOpV4_RedCarouselDuckPark extends AutoOpV4Base {
 
     TrajectorySequence hub_to_carousel;

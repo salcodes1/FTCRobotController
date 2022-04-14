@@ -1,23 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.OpenCV.InsideDetectPipeline;
-import org.firstinspires.ftc.teamcode.Outtake;
+import org.firstinspires.ftc.teamcode.OpenCV.FreightDetectionPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvWebcam;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Config
 public class Intake {
@@ -45,12 +41,13 @@ public class Intake {
 
 	OpMode opMode;
 
-
 	public Servo servoIntake;
-	public DigitalChannel[] touchSensors;
-
 
 	boolean isCurrentlyWorking = false;
+
+	public FreightDetectionPipeline freightDetectionPipeline;
+	public OpenCvWebcam freightCamera;
+//	public Rev2mDistanceSensor distanceSensor;
 
 	public Intake(OpMode opMode) {
 
@@ -65,18 +62,28 @@ public class Intake {
 
 		servoIntake = opMode.hardwareMap.get(Servo.class, "servoIntake");
 
-		touchSensors = new DigitalChannel[]{
-			opMode.hardwareMap.get(DigitalChannel.class, "touchSensor1"),
-			opMode.hardwareMap.get(DigitalChannel.class, "touchSensor2"),
-			opMode.hardwareMap.get(DigitalChannel.class, "touchSensor3")
-
-		};
-
 		servoIntake.setPosition(0);
 
-		for(DigitalChannel sensor : touchSensors) {
-			sensor.setMode(DigitalChannel.Mode.INPUT);
-		}
+//		distanceSensor = opMode.hardwareMap.get(Rev2mDistanceSensor.class, "distanceSensor");
+
+		// CAMERA INITIALIZATION
+		freightDetectionPipeline = new FreightDetectionPipeline(opMode.telemetry);
+
+//		freightCamera = OpenCvCameraFactory.getInstance().createWebcam(opMode.hardwareMap.get(WebcamName.class, "Webcam"));
+//		freightCamera.setPipeline(freightDetectionPipeline);
+//
+//		freightCamera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+//			@Override
+//			public void onOpened() {
+//				freightCamera.startStreaming(1920, 1080, OpenCvCameraRotation.UPRIGHT);
+//			}
+//
+//			@Override
+//			public void onError(int errorCode) {
+//				opMode.telemetry.addLine("Freight camera couldn't init!!!" + "Error " + errorCode);
+//			}
+//		});
+
 
 	}
 

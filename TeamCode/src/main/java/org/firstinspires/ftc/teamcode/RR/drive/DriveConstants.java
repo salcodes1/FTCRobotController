@@ -34,8 +34,8 @@ public class DriveConstants {
 
 
     public static final boolean RUN_USING_ENCODER = true;
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(25, 0, 5,
-            14.5023013
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(15, 0, 3.2,
+            14.1723
             /*getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV)*/);
 
     /*
@@ -48,7 +48,7 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 1.97; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 7.83; //7.755906; //12; //10.40 ; // in
+    public static double TRACK_WIDTH = 14.88; //7.83; //7.755906; //12; //10.40 ; // in
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -68,8 +68,8 @@ public class DriveConstants {
      * inches.
      */
 
-    public static double MAX_VEL = 32.5;
-    public static double MAX_ACCEL = 40;
+    public static double MAX_VEL = 55;
+    public static double MAX_ACCEL = 47;
     public static double MAX_ANG_VEL =  Math.toRadians(180);
     public static double MAX_ANG_ACCEL = Math.toRadians(180);
 

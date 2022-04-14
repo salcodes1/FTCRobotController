@@ -13,7 +13,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 
 @Config
-public class InsideDetectPipeline extends OpenCvPipeline {
+public class FreightDetectionPipeline extends OpenCvPipeline {
 
 
     Mat mat = new Mat();
@@ -23,9 +23,9 @@ public class InsideDetectPipeline extends OpenCvPipeline {
     Telemetry telemetry;
 
 
-    boolean pieceDetected = false;
+    boolean freightDetected = false;
 
-    public InsideDetectPipeline(Telemetry telemetry) {
+    public FreightDetectionPipeline(Telemetry telemetry) {
         this.telemetry = telemetry;
     }
 
@@ -33,14 +33,12 @@ public class InsideDetectPipeline extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
         Core.normalize(input, mat, 0, 255, Core.NORM_MINMAX);
 
-
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);
         Imgproc.blur(mat, mat, new Size(5, 5));
 
         // Yellow
         Scalar lowHSV = new Scalar(0, 150, 120);
         Scalar highHSV = new Scalar(45, 255, 255);
-
 
         Core.inRange(mat, lowHSV, highHSV, gateMatYellow);
 
@@ -50,19 +48,17 @@ public class InsideDetectPipeline extends OpenCvPipeline {
 
         Core.inRange(mat, lowHSV, highHSV, gateMatWhite);
 
-            Core.bitwise_or(gateMatWhite, gateMatYellow, gateMatYellow);
+        Core.bitwise_or(gateMatWhite, gateMatYellow, gateMatYellow);
 
         double ratio = Core.sumElems(gateMatYellow).val[0] / gateMatYellow.size().area() / 255;
 
-        pieceDetected = ratio >= IntakeMechanism.PIXELS_RATIO;
-
+        freightDetected = ratio >= IntakeMechanism.PIXELS_RATIO;
 
         Imgproc.cvtColor(gateMatYellow, gateMatYellow, Imgproc.COLOR_GRAY2RGB);
-
 
         return gateMatYellow;
     }
 
-    public boolean pieceInside() { return pieceDetected; }
+    public boolean freightInside() { return freightDetected; }
 
 }

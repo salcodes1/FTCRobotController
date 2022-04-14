@@ -8,5 +8,4 @@ public class AutoOpV4_BlueCarouselDuckPark extends AutoOpV4_RedCarouselDuckPark{
 	protected void setParams() {
 		side = Side.BLUE;
 	}
-
 }

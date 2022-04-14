@@ -55,7 +55,6 @@ public abstract class AutonomousOpMode extends LinearOpMode {
 
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        telemetry.setAutoClear(true);
 
         telemetry.addLine("Precompiling trajectories;\n!DO NOT STOP THE PROCESS!");
         telemetry.update();
@@ -103,7 +102,7 @@ public abstract class AutonomousOpMode extends LinearOpMode {
             packet.addLine(line);
         }
 
-        FtcDashboard.getInstance().sendTelemetryPacket(packet);
+//        FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 
     void updateRobotState() {

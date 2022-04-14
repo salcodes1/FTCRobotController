@@ -7,14 +7,13 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.OpenCV.InsideDetectPipeline;
+import org.firstinspires.ftc.teamcode.OpenCV.FreightDetectionPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Config
 public class IntakeMechanism {
@@ -41,14 +40,14 @@ public class IntakeMechanism {
 
     WebcamName webcamName;
     OpenCvCamera camera;
-    InsideDetectPipeline insideDetectPipeline;
+    FreightDetectionPipeline freightDetectionPipeline;
 
     OpMode opMode;
 
     int elementsCount = 0;
 
     public IntakeMechanism(OpMode opMode) {
-        insideDetectPipeline = new InsideDetectPipeline(opMode.telemetry);
+        freightDetectionPipeline = new FreightDetectionPipeline(opMode.telemetry);
 
 
         this.opMode = opMode;
@@ -56,7 +55,7 @@ public class IntakeMechanism {
 
         webcamName = opMode.hardwareMap.get(WebcamName.class, "Webcam 1");
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName);
-        camera.setPipeline(insideDetectPipeline);
+        camera.setPipeline(freightDetectionPipeline);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
@@ -111,7 +110,7 @@ public class IntakeMechanism {
             while(!Thread.interrupted()) {
                 camera.openCameraDevice();
 
-                if(insideDetectPipeline.pieceInside()) {
+                if(freightDetectionPipeline.freightInside()) {
                     elementsCount++;
                     lastResult = true;
                     break;

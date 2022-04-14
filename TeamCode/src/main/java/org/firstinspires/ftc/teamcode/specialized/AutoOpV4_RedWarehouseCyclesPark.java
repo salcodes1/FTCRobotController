@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunLinear;
 import org.firstinspires.ftc.teamcode.bt.actions.controlflow.RunParallelWait;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeDropFreight;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeSetLevel;
-@Disabled
+//@Disabled
 @Autonomous(name = "Red Warehouse Cycles Park")
 public class AutoOpV4_RedWarehouseCyclesPark extends AutoOpV4Base {
 
@@ -42,18 +42,21 @@ public class AutoOpV4_RedWarehouseCyclesPark extends AutoOpV4Base {
             ),
             new OuttakeDropFreight(),
             new DoNCycles(
-                3,
+                4,
                 //warehouse
                 new Vector2d[] {
-                    new Vector2d(3, 0),
-                    new Vector2d(5.5, -2),
-                    new Vector2d(8, -3),
+                    new Vector2d(0, 0),
+                    new Vector2d(0, 0),
+                    new Vector2d(0, 0),
+                    new Vector2d(0, 0)
                 },
                 //hub
                 new Vector2d[] {
-                    new Vector2d(0, -2),
-                    new Vector2d(0, -2),
-                    new Vector2d(0, -2),
+                    new Vector2d(0, 0),
+                    new Vector2d(0, 0),
+                    new Vector2d(0, 0),
+                    new Vector2d(0, 0),
+                    new Vector2d(0, 0)
                 },
                 side
             ),

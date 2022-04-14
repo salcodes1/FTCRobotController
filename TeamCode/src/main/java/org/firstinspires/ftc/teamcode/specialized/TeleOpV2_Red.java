@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.specialized.prev;
+package org.firstinspires.ftc.teamcode.specialized;
 
 import static org.firstinspires.ftc.teamcode.Outtake.SERVO_LOADING;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -17,8 +18,9 @@ import org.firstinspires.ftc.teamcode.Outtake;
 
 import java.util.Arrays;
 
-@TeleOp(name = "TeleOp Blue", group = "0")
-public class TeleOpV2_Blue extends OpMode {
+@Disabled
+@TeleOp(name = "TeleOp Red", group = "0")
+public class TeleOpV2_Red extends OpMode {
 
     // Gamepad 1
     // left stick, triggers - movement
@@ -67,7 +69,7 @@ public class TeleOpV2_Blue extends OpMode {
         outtake = new Outtake(this);
 
         intakeMotor = hardwareMap.get(DcMotor.class, "motorIntake");
-        servoCapArm = hardwareMap.get(Servo.class, "servoCapArm");
+		servoCapArm = hardwareMap.get(Servo.class, "servoCapArm");
         servoCapClaw = hardwareMap.get(Servo.class, "servoCapClaw");
 
         intermediaryMotor = hardwareMap.get(DcMotor.class, "motorIntermediar");
@@ -77,9 +79,9 @@ public class TeleOpV2_Blue extends OpMode {
         outtake.servo.setPosition(SERVO_LOADING);
 
         touchSensors = new DigitalChannel[]{
-                hardwareMap.get(DigitalChannel.class, "touchSensor1"),
-                hardwareMap.get(DigitalChannel.class, "touchSensor2"),
-                hardwareMap.get(DigitalChannel.class, "touchSensor3")
+            hardwareMap.get(DigitalChannel.class, "touchSensor1"),
+            hardwareMap.get(DigitalChannel.class, "touchSensor2"),
+            hardwareMap.get(DigitalChannel.class, "touchSensor3")
         };
 
         touchSensorsLastTurnedOn = new long[touchSensors.length];
@@ -103,7 +105,6 @@ public class TeleOpV2_Blue extends OpMode {
         g2.update();
         outtake.update();
 
-
         if(Math.abs(gamepad2.right_stick_y) > 0.4) {
             outtake.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             Log.d("FF", Double.toString(gamepad2.left_stick_y * 0.5));
@@ -111,13 +112,14 @@ public class TeleOpV2_Blue extends OpMode {
         }
         if(g2.getButtonDown("joystick_right")) outtake.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        drive.vectorMove(-gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_trigger - gamepad1.right_trigger, 0.75);
+
+        drive.vectorMove(-gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.left_trigger - gamepad1.right_trigger,  0.75);
 
         if (g1.getButtonDown("bumper_left")) carouselState = !carouselState;
 
         telemetry.update();
 
-        carouselMotor.setPower(carouselState ? (g1.getButton("bumper_right") ? 0.7 : 0.43) : 0.0);
+        carouselMotor.setPower(carouselState ? (g1.getButton("bumper_right") ? -0.7 : -0.43) : 0.0);
         intakeMotor.setPower(g2.getButton("b") ? 1.0 : intakeState != IntakeState.None? -1.0 : 0.0);
         intermediaryMotor.setPower(g2.getButton("b") ? 1.0 : intakeState != IntakeState.None ? -1.0 : 0.0);
 
@@ -140,7 +142,7 @@ public class TeleOpV2_Blue extends OpMode {
 
         servoCapArm.setPosition(capPos);
 
-        if (g2.getButtonDown("dpad_down")) outtake.setLevel(Outtake.Level.S_mid);
+        if (g2.getButtonDown("dpad_down")) outtake.setLevel(Outtake.Level.low);
         if (g2.getButtonDown("dpad_left") || g2.getButtonDown("dpad_right"))
             outtake.setLevel(Outtake.Level.mid);
         if (g2.getButtonDown("dpad_up")) outtake.setLevel(Outtake.Level.high);

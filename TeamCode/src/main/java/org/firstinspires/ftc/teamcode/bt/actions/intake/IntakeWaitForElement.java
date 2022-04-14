@@ -2,12 +2,8 @@ package org.firstinspires.ftc.teamcode.bt.actions.intake;
 
 import android.annotation.SuppressLint;
 
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-
 import org.firstinspires.ftc.teamcode.bt.Action;
 import org.firstinspires.ftc.teamcode.bt.AutonomousOpMode;
-
-import java.util.Arrays;
 
 public class IntakeWaitForElement extends Action {
     @Override
@@ -23,13 +19,7 @@ public class IntakeWaitForElement extends Action {
     @SuppressLint("NewApi")
     @Override
     protected boolean _hasFinished(AutonomousOpMode context) {
-        int s = 0;
-
-        for(DigitalChannel touchSensor : context.intake.touchSensors) {
-            if(touchSensor.getState()) s++;
-        }
-
-        return s > 0;
+        return context.intake.freightDetectionPipeline.freightInside();
     }
 
     @Override
@@ -37,12 +27,4 @@ public class IntakeWaitForElement extends Action {
         context.intake.servoIntake.setPosition(0);
     }
 
-    @Override
-    public String getCustomDisplay(AutonomousOpMode context) {
-        int s = 0;
-        for(DigitalChannel touchSensor : context.intake.touchSensors) {
-            if(touchSensor.getState()) s++;
-        }
-        return s + "/" + context.intake.touchSensors.length;
-    }
 }
