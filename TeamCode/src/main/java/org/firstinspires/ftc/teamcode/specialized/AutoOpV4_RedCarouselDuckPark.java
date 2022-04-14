@@ -27,7 +27,7 @@ import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeSetLevel;
 @Autonomous(name = "Red Carousel Duck Park")
 public class AutoOpV4_RedCarouselDuckPark extends AutoOpV4Base {
 
-    TrajectorySequence hub_to_carousel;
+    Trajectory hub_to_carousel;
     Trajectory carousel_to_warehouse, carousel_to_park, hub_to_storage;
 
     @Override
@@ -39,9 +39,7 @@ public class AutoOpV4_RedCarouselDuckPark extends AutoOpV4Base {
         startLocation = StartLocation.CAROUSEL;
 
         start_to_hub = AssetsTrajectoryManager.load(SIDE("cstart_to_hub_q"));
-        hub_to_carousel = drive.trajectorySequenceBuilder(new Pose2d(-12, -43.25 * (side == Side.RED? 1 : -1), Math.toRadians(-90)  * (side == Side.RED? 1 : -1)))
-            .addTrajectory(AssetsTrajectoryManager.load(SIDE("hub_to_carousel_q")))
-            .build();
+        hub_to_carousel = AssetsTrajectoryManager.load(SIDE("hub_to_carousel_q"));
         carousel_to_warehouse = AssetsTrajectoryManager.load(SIDE("carousel_to_warehouse"));
         carousel_to_park = AssetsTrajectoryManager.load(SIDE("carousel_to_bridge"));
         carousel_to_hub = AssetsTrajectoryManager.load(SIDE("carousel_to_hub_wduck"));
