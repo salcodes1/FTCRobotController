@@ -1,15 +1,10 @@
 package org.firstinspires.ftc.teamcode.specialized;
 
-import com.acmerobotics.roadrunner.drive.Drive;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.TranslationalVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Outtake;
-import org.firstinspires.ftc.teamcode.RR.drive.DriveConstants;
-import org.firstinspires.ftc.teamcode.RR.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RR.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.RR.util.AssetsTrajectoryManager;
 import org.firstinspires.ftc.teamcode.bt.Action;
@@ -24,6 +19,8 @@ import org.firstinspires.ftc.teamcode.bt.actions.intake.IntermediarySetRunning;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeDropFreight;
 import org.firstinspires.ftc.teamcode.bt.actions.outtake.OuttakeSetLevel;
 
+
+@Autonomous(name = "Red Carousel Duck Park")
 public class AutoOpV4_RedCarouselDuckPark extends AutoOpV4Base {
 
     TrajectorySequence hub_to_carousel;
@@ -51,7 +48,7 @@ public class AutoOpV4_RedCarouselDuckPark extends AutoOpV4Base {
     @Override
     protected Action getRoutine() {
         return new RunLinear(
-            new RunInline(ctx -> ctx.outtake.capServo.setPosition(0.65)),
+            new RunInline(ctx -> ctx.outtake.servoCapArm.setPosition(0.65)),
             new RunParallelWait(
                 new RunLinear(
                     new RunDelay(600),

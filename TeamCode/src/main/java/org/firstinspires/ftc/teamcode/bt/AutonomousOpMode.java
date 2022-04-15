@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.Intake;
 import org.firstinspires.ftc.teamcode.OpenCV.CapstoneDetectPipeline;
 import org.firstinspires.ftc.teamcode.Outtake;
 import org.firstinspires.ftc.teamcode.RR.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.mechanisms.FreightSensor;
 import org.firstinspires.ftc.teamcode.statics.PoseStorage;
 import org.openftc.easyopencv.OpenCvCamera;
 
@@ -34,6 +35,7 @@ public abstract class AutonomousOpMode extends LinearOpMode {
     public CapstoneDetectPipeline capstoneDetection;
     public WebcamName webcamName;
     public OpenCvCamera camera;
+    public FreightSensor freightSensor;
 
     public Outtake.Level preloadLevel = Outtake.Level.high;
 
@@ -50,7 +52,7 @@ public abstract class AutonomousOpMode extends LinearOpMode {
         containerServo = hardwareMap.get(Servo.class, "servoOuttake");
 
 
-
+        freightSensor = new FreightSensor(hardwareMap);
 
 
 

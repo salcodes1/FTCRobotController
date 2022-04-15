@@ -85,25 +85,25 @@ abstract public class AutoOpV4Base extends AutonomousOpMode {
 
 		// CAMERA INITIALIZATION
 		capstoneDetection = new CapstoneDetectPipeline();
-
-		webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
-		int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-
-		camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-		camera.setPipeline(capstoneDetection);
-
-		camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-			@Override
-			public void onOpened() {
-				camera.startStreaming(1920, 1080, OpenCvCameraRotation.UPRIGHT);
-//                camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
-			}
-
-			@Override
-			public void onError(int errorCode) {
-				telemetry.addLine("Camera couldn't init!!!" + "Error " + errorCode);
-			}
-		});
+//
+//		webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+//		int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+//
+//		camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+//		camera.setPipeline(capstoneDetection);
+//
+//		camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+//			@Override
+//			public void onOpened() {
+//				camera.startStreaming(1920, 1080, OpenCvCameraRotation.UPRIGHT);
+////                camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+//			}
+//
+//			@Override
+//			public void onError(int errorCode) {
+//				telemetry.addLine("Camera couldn't init!!!" + "Error " + errorCode);
+//			}
+//		});
 
 
 		telemetry.addLine("init complete");
@@ -188,26 +188,20 @@ abstract public class AutoOpV4Base extends AutonomousOpMode {
 							new RunTrajectory(h_to_w),
 							new IntakeSetPower(-1),
 							new IntermediarySetRunning(true),
-							new IntakeSetExtender(1.0),
 							new OuttakeSetLevel(Outtake.Level.loading),
 							new RunLinear(
 									new RunParallelRace(
 											new IntakeWaitForElement(),
 											new RunDelay(4000)
 									),
-									new IntakeSetPower(0),
-									new IntakeSetExtender(0)
+									new IntakeSetPower(1)
 							)
 
 					),
 					new RunParallelWait(
 							new RunTrajectory(w_to_h),
 							new RunLinear(
-									new RunDelay(600),
-									new IntakeSetPower(-1),
-									new RunDelay(1300),
-									new IntakeSetPower(1),
-									new IntermediarySetRunning(true),
+									new RunDelay(700),
 									new OuttakeSetLevel(Outtake.Level.high)
 							)
 					),
@@ -250,7 +244,7 @@ abstract public class AutoOpV4Base extends AutonomousOpMode {
 		Trajectory get_w_to_h(AutonomousOpMode context, int cycleNo) {
 			return context.drive.trajectoryBuilder(new Pose2d(43.00 + wPoints[cycleNo].getX(), (-65.70 + wPoints[cycleNo].getY()) * (side == Side.RED ? 1 : -1), Math.toRadians(0) * (side == Side.RED ? 1 : -1)), Math.toRadians(180) * (side == Side.RED ? 1 : -1))
 					.lineToConstantHeading(new Vector2d(17.00, (-65.70 + wPoints[cycleNo].getY()) * (side == Side.RED ? 1 : -1)))
-					.splineTo(new Vector2d(-12.00 + hPoints[cycleNo].getX(), (-43.25 + hPoints[cycleNo].getY()) * (side == Side.RED ? 1 : -1)), Math.toRadians(90) * (side == Side.RED ? 1 : -1))
+					.splineTo(new Vector2d(-12.00 + hPoints[cycleNo + 1].getX(), (-43.25 + hPoints[cycleNo + 1].getY()) * (side == Side.RED ? 1 : -1)), Math.toRadians(90) * (side == Side.RED ? 1 : -1))
 					.build();
 		}
 

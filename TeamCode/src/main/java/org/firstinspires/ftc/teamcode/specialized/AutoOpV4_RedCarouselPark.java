@@ -1,14 +1,10 @@
 package org.firstinspires.ftc.teamcode.specialized;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.TranslationalVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Outtake;
-import org.firstinspires.ftc.teamcode.RR.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.RR.util.AssetsTrajectoryManager;
 import org.firstinspires.ftc.teamcode.bt.Action;
 import org.firstinspires.ftc.teamcode.bt.actions.RunCarousel;
@@ -44,7 +40,7 @@ public class AutoOpV4_RedCarouselPark extends AutoOpV4Base {
     @Override
     protected Action getRoutine() {
         return new RunLinear(
-            new RunInline(ctx -> ctx.outtake.capServo.setPosition(0.65)),
+            new RunInline(ctx -> ctx.outtake.servoCapArm.setPosition(0.65)),
             new RunParallelWait(
                 new RunLinear(
                     new RunDelay(600),

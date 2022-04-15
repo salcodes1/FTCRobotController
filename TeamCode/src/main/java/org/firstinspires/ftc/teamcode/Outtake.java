@@ -3,19 +3,16 @@ package org.firstinspires.ftc.teamcode;
 import android.util.Log;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.teamcode.mechanisms.OuttakeMechanism;
 
 import java.util.ArrayList;
 
 @Config
 public class Outtake {
 
-	public final Servo capServo;
+	public final Servo servoCapArm, servoCapClaw;
 	public DcMotor motor;
 	public Servo servo;
 
@@ -63,10 +60,10 @@ public class Outtake {
 	static public int S_HIGH_TICKS = 450;
 
 
-	public static double SERVO_ARMED = 0.8;
-	public static double SERVO_DROP_LOW = 0.4;
-	public static double SERVO_DROP_NORMAL = 0.4;
-	public static double SERVO_LOADING = 1.0;
+	public static double SERVO_ARMED = 0.5;
+	public static double SERVO_DROP_LOW = 0.2;
+	public static double SERVO_DROP_NORMAL = 0.2;
+	public static double SERVO_LOADING = 0.75;
 
 	public Outtake(OpMode opMode)
 	{
@@ -79,8 +76,12 @@ public class Outtake {
 
 		servo.setPosition(SERVO_ARMED);
 
-		capServo = opMode.hardwareMap.get(Servo.class, "servoCapArm");
-		capServo.setPosition(0.75);
+		servoCapArm = opMode.hardwareMap.get(Servo.class, "servoCapArm");
+		servoCapArm.setPosition(0.8);
+
+		servoCapClaw = opMode.hardwareMap.get(Servo.class, "servoCapClaw");
+		servoCapClaw.setPosition(0);
+
 	}
 
 	public void setLevel(Level level) {
