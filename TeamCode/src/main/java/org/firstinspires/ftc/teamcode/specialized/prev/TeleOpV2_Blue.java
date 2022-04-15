@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.GamepadEx;
 import org.firstinspires.ftc.teamcode.Mecanum;
 import org.firstinspires.ftc.teamcode.Outtake;
+import org.firstinspires.ftc.teamcode.mechanisms.FreightSensor;
 
 import java.util.Arrays;
 
@@ -59,6 +60,8 @@ public class TeleOpV2_Blue extends OpMode {
 
     Outtake outtake;
 
+    FreightSensor freightSensor;
+
     @Override
     public void init() {
         g1 = new GamepadEx(gamepad1);
@@ -93,6 +96,8 @@ public class TeleOpV2_Blue extends OpMode {
 
         servoCapClaw.setPosition(1);
 
+        freightSensor = new FreightSensor(hardwareMap);
+
     }
 
     @SuppressLint("NewApi")
@@ -102,6 +107,7 @@ public class TeleOpV2_Blue extends OpMode {
         g1.update();
         g2.update();
         outtake.update();
+        freightSensor.update();
 
 
         if(Math.abs(gamepad2.right_stick_y) > 0.4) {
@@ -150,10 +156,9 @@ public class TeleOpV2_Blue extends OpMode {
             servoIntake.setPosition((servoIntakeState = !servoIntakeState)? 1 : 0);
 
 
-
         if (g2.getButtonDown("a")) intakeState = intakeState == IntakeState.Automatic? IntakeState.None : IntakeState.Automatic;
         else {
-            if(intakeState == IntakeState.Automatic && Arrays.stream(touchSensors).anyMatch(DigitalChannel::getState)) {
+            if(intakeState == IntakeState.Automatic && freightSensor.isDetectingFreight()) {
                 intakeState = IntakeState.None;
             }
 
