@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.Outtake.SERVO_LOADING;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
+import com.qualcomm.hardware.lynx.commands.standard.LynxSetModuleLEDColorCommand;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -94,7 +95,9 @@ public class TeleOpV2_Blue extends OpMode {
         servoIntake.setPosition(0);
         servoCapArm.setPosition(capPos);
 
-        servoCapClaw.setPosition(1);
+        servoCapClaw.setPosition(0);
+
+        LynxSetModuleLEDColorCommand
 
         freightSensor = new FreightSensor(hardwareMap);
 
