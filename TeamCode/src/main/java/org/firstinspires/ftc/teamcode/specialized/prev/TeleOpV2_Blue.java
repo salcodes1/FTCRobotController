@@ -97,8 +97,6 @@ public class TeleOpV2_Blue extends OpMode {
 
         servoCapClaw.setPosition(0);
 
-        LynxSetModuleLEDColorCommand
-
         freightSensor = new FreightSensor(hardwareMap);
 
     }

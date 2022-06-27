@@ -50,10 +50,10 @@ public class Outtake {
 	Level currentLevel;
 
 	static public int LOADING_TICKS = 0;
-	static public int LOW_TICKS = -50;
-	static public int MID_TICKS = 450;
+	static public int LOW_TICKS = 0;
+	static public int MID_TICKS = 400;
 	static public int MID_AUTO_TICKS = 550;
-	static public int HIGH_TICKS = 1350;
+	static public int HIGH_TICKS = 1500;
 
 	static public int S_LOW_TICKS = -50;
 	static public int S_MID_TICKS = 225;
@@ -61,9 +61,9 @@ public class Outtake {
 
 
 	public static double SERVO_ARMED = 0.5;
-	public static double SERVO_DROP_LOW = 0.2;
-	public static double SERVO_DROP_NORMAL = 0.2;
-	public static double SERVO_LOADING = 0.75;
+	public static double SERVO_DROP_LOW = 0.0;
+	public static double SERVO_DROP_NORMAL = 0.0;
+	public static double SERVO_LOADING = 0.7;
 
 	public Outtake(OpMode opMode)
 	{
