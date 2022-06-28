@@ -109,7 +109,7 @@ public class IntakeMechanism {
             intermediaryMotor.setPower(INTERMEDIARY_MOTOR_POWER);
 
             while(!Thread.interrupted()) {
-                camera.openCameraDevice();
+//                camera.openCameraDevice();
 
                 if(insideDetectPipeline.pieceInside()) {
                     elementsCount++;

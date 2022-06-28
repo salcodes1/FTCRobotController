@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -61,9 +62,18 @@ abstract public class AutoOpV4Base extends AutonomousOpMode {
 		return ((side == Side.RED) ? "red_" : "blue_") + name;
 	}
 
+	Servo odoLeft, odoCenter, odoRight;
 
 	@Override
 	protected void initStart() {
+
+		odoLeft = hardwareMap.get(Servo.class, "servoOdoLeft");
+		odoCenter = hardwareMap.get(Servo.class, "servoOdoCenter");
+		odoRight = hardwareMap.get(Servo.class, "servoOdoRight");
+
+		odoLeft.setPosition(1.0);
+		odoCenter.setPosition(1.0);
+		odoRight.setPosition(1.0);
 
 		if (side == Side.RED) {
 			if (startLocation == StartLocation.WAREHOUSE)
